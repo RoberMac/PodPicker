@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2015 RoberTu <robertu0717@gmail.com>
  * @license MIT
- * @version v0.0.1
+ * @version v0.0.2
  */
 
 ;(function (window, document){
@@ -14,7 +14,7 @@
     function PodPicker(container, items, options){
 
         // init
-        this.itemsIndex = 1
+        this.itemsIndex = 0
         this.preTime = 0
         this.startTimeSet = []
 
@@ -97,88 +97,115 @@
         var audioElem = options.audioElem
                 ? document.getElementById(options.audioElem)
                 : document.getElementsByTagName('audio')[0],
-            timelineColor = options.timelineColor || '#000';
-
-        // Create the timeline element and then append it to `container` element
-        var fragment = document.createDocumentFragment(''),
-            timeline = document.createElement('div'),
-            pointer  = document.createElement('span'),
-            ul       = document.createElement('ul'),
-            len      = items.length,
+            timelineColor = options.timelineColor || '#CECECF',
             that     = this;
 
-        for (var i = 0; i < len; i++){
 
-            var item  = document.createElement('li'),
-                span  = document.createElement('span'),
-                start = this.convertTime(items[i].start);
+        /**
+         * Create the timeline element and then append it to `container` element
+         ************************************************************************
+         */
 
-            // Extract all `item` start time and then push it to `this.startTimeSet`
-            this.startTimeSet.push(start)
+        /**
+         * Check `audioElem` source file, throw error if audio file is MP3 file format
+         *
+         * For more details, see: 
+         *   http://forums.codescript.in/javascript/html5-audio-currenttime-attribute-inaccurate-27606.html
+         *   https://jsfiddle.net/yp3o8cyw/2/
+         *
+         */
+        var currentSrcInterval = setInterval(function (){
+            var currentSrc = audioElem.currentSrc
+            if (currentSrc){
+                clearInterval(currentSrcInterval)
+                currentSrc.match(/\.mp3/i)
+                    ? that.throwError('Pod Picker: does not support MP3 file format')
+                    : createTimeline()
+            }
+        }, 10)
 
-            // Register event handlers to `item` element
-            ;(function (_item, index, start){
+        function createTimeline(){
+            var fragment = document.createDocumentFragment(''),
+                timeline = document.createElement('div'),
+                pointer  = document.createElement('span'),
+                ul       = document.createElement('ul'),
+                len      = items.length;
 
-                // Jump to certain time offsets in `audioElem` when user click the item > span element
-                _item.addEventListener('click', function (){
-                    audioElem.currentTime = start
-                    audioElem.play()
-                    that.setPointerPosition(false, index, true)
-                })
+            for (var i = 0; i < len; i++){
 
-                // set pointer position to current mouseenter item
-                _item.addEventListener('mouseenter', function (){
-                    that.setPointerPosition(false, index)
-                })
-            })(span, i + 1, start)
+                var item  = document.createElement('li'),
+                    span  = document.createElement('span'),
+                    start = that.convertTime(items[i].start);
 
-            item.className = 'pp-item'
-            span.appendChild(document.createTextNode(items[i].title))
-            item.appendChild(span)
-            ul.appendChild(item)
-        }
+                // Extract all `item` start time and then push it to `that.startTimeSet`
+                that.startTimeSet.push(start)
 
+                // Register event handlers to `item` element
+                ;(function (_item, index, start){
+                    // Jump to certain time offsets in `audioElem` when user click the item > span element
+                    _item.addEventListener('click', function (){
+                        audioElem.pasued
+                        ? audioElem.play()
+                        : null
+                        audioElem.currentTime = start
+                        audioElem.play()
+                        that.setPointerPosition(false, index, true)
+                    })
 
-        // Register event handlers to `timeline` element
-        timeline.addEventListener('mouseleave', function (){
-            // reset pointer position
-            that.setPointerPosition(true)
-        })
+                    // set pointer position to current mouseenter item
+                    _item.addEventListener('mouseenter', function (){
+                        that.setPointerPosition(false, index)
+                    })
+                })(span, i + 1, start)
 
-        // Register event handlers to `audioElem` element
-        audioElem.addEventListener('timeupdate', function (){
-
-            // init
-            var currentTime  = audioElem.currentTime,
-                startTimeSet = that.startTimeSet,
-                len          = startTimeSet.length;
-
-            if (Math.abs(that.preTime - currentTime) > 1){
-                // user-triggered 
-                for (var i = 0; i < len; i++){
-                    currentTime > startTimeSet[i]
-                    ? that.setPointerPosition(false, i + 1, true)
-                    : null
-                }
-            } else {
-                // auto-triggered
-                for (var i = 0; i < len; i++){
-                    currentTime > startTimeSet[i] - 1 && currentTime <= startTimeSet[i] + 1
-                    ? that.setPointerPosition(false, i + 1, true)
-                    : null
-                }
+                item.className = 'pp-item'
+                span.appendChild(document.createTextNode(items[i].title))
+                item.appendChild(span)
+                ul.appendChild(item)
             }
 
-            that.preTime = currentTime
+            // Register event handlers to `timeline` element
+            timeline.addEventListener('mouseleave', function (){
+                // reset pointer position
+                that.setPointerPosition(true)
+            })
 
-        })
+            // Register event handlers to `audioElem` element
+            audioElem.addEventListener('timeupdate', function (){
+                // init
+                var currentTime  = audioElem.currentTime,
+                    startTimeSet = that.startTimeSet,
+                    len          = startTimeSet.length;
 
-        pointer.id = 'pp-pointer'
-        timeline.id = 'pp-timeline'
-        timeline.appendChild(ul)
-        timeline.appendChild(pointer)
-        fragment.appendChild(timeline)
-        container.appendChild(fragment)
+                if (Math.abs(that.preTime - currentTime) > 1){
+                    // user-triggered
+                    for (var i = 0; i < len; i++){
+                        currentTime > startTimeSet[i]
+                        ? that.setPointerPosition(false, i + 1, true)
+                        : null
+                    }
+                } else {
+                    // auto-triggered
+                    for (var i = 0; i < len; i++){
+                        currentTime > startTimeSet[i] - 1 
+                            && currentTime <= startTimeSet[i] + 1 
+                            && that.itemsIndex !== i + 1
+                        ? that.setPointerPosition(false, i + 1, true)
+                        : null
+                    }
+                }
+
+                that.preTime = currentTime
+            })
+
+            ul.style.color = timelineColor
+            pointer.id = 'pp-pointer'
+            timeline.id = 'pp-timeline'
+            timeline.appendChild(ul)
+            timeline.appendChild(pointer)
+            fragment.appendChild(timeline)
+            container.appendChild(fragment)
+        }
 
     }
 
@@ -192,12 +219,22 @@
             item_h     = item[0].offsetHeight,
             item_len   = item.length;
 
-        isSetItemsIndex
-        ? this.itemsIndex = index
-        : null
+        if (isSetItemsIndex){
+            // Set timeline pointer position
+            this.itemsIndex = index
+            // Set timeline chapter style
+            item[index - 1].children[0].className = 'currentChapter'
+            for (var i = 0; i < item_len; i++){
+                i !== index - 1
+                ? item[i].children[0].className = ''
+                : null
+            }
+        }
 
         pointer.style.top = isResetPosition
-                            ? (this.itemsIndex * item_h - item_h / 2 - 6) + 'px'
+                            ? this.itemsIndex === 0
+                                ? '0px' // before play
+                                : (this.itemsIndex * item_h - item_h / 2 - 6) + 'px'
                             : (index * item_h - item_h / 2 - 6) + 'px'
 
     }
