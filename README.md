@@ -10,7 +10,7 @@
 
 - Include the scripts and style sheets in the \<head\> section
 ```html
-</head>
+<head>
     ...
     <link rel="stylesheet" type="text/css" href="PodPicker.min.css">
     <script type="text/javascript" src="PodPicker.min.js"></script>
