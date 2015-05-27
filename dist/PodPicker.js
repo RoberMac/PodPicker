@@ -222,8 +222,8 @@
         if (isSetItemsIndex){
             // Set timeline pointer position
             this.itemsIndex = index
-            // Set timeline chapter style
-            item[index - 1].children[0].className = 'currentChapter'
+            // Set timeline section style
+            item[index - 1].children[0].className = 'currentSection'
             for (var i = 0; i < item_len; i++){
                 i !== index - 1
                 ? item[i].children[0].className = ''
