@@ -1,4 +1,4 @@
-/**
+/*!
  * Pod Picker - A Podcast Timeline Generator
  * https://github.com/RoberMac/PodPicker
  *

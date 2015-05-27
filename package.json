@@ -1,0 +1,29 @@
+{
+  "name": "PodPicker",
+  "version": "0.0.2",
+  "description": "A Podcast Timeline Generator",
+  "main": "dist/PodPicker.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RoberMac/PodPicker.git"
+  },
+  "author": {
+    "name": "RoberTu",
+    "email": "robertu0717@gmail.com",
+    "url": "https://github.com/RoberMac"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RoberMac/PodPicker/issues"
+  },
+  "homepage": "https://github.com/RoberMac/PodPicker",
+  "devDependencies": {
+    "gulp": "~3.8.11",
+    "gulp-minify-css": "^1.1.0",
+    "gulp-uglify": "~1.2.0",
+    "gulp-watch": "~4.2.4"
+  },
+  "dependencies": {
+    "gulp-concat": "^2.5.2"
+  }
+}
