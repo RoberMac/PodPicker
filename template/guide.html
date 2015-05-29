@@ -1,0 +1,136 @@
+<div id="guide">
+
+    <div id="install">
+        <h2>Install</h2>
+        <p><code>npm install podpicker</code><span id="slash">/</span><code>bower install podpicker</code></p>
+        <p></p>
+    </div>
+
+    <!-- usage -->
+    <div id="usage">
+        <h2>Usage</h2>
+        <!-- Getting Started -->
+        <h4>Getting Started</h4>
+        <div class="step">
+            <p>
+                <span class="firstletter">1</span>
+                Include the scripts and style sheets in the &lt;head&gt; section
+            </p>
+            <pre>
+&lt;head&gt;
+    ...
+    &lt;link rel="stylesheet" type="text/css" href="PodPicker.min.css"&gt;
+    &lt;script type="text/javascript" src="PodPicker.min.js">&lt;/script&gt;
+&lt;/head&gt;</pre>
+        </div>
+        <div class="step">
+            <p>
+                <span class="firstletter">2</span>
+                Create a &lt;div&gt; wrapper which will contain the Pod Picker Timeline
+            </p>
+            <pre>&lt;div id="pp-wrapper"&gt;&lt;/div&gt;</pre>
+        </div>
+        <div class="step">
+            <p>
+                <span class="firstletter">3</span>
+                Initialization the Pod Picker Timeline
+            </p>
+            <pre>
+&lt;dscript type="text/javascript"&gt;
+    var pp = new PodPicker('pp-wrapper', items [, options]) // described in the following
+&lt;/script&gt;</pre>
+        </div>
+        <!--end Getting Started -->
+        <!-- Parameters -->
+        <h4>Parameters</h4>
+        <p>The PodPicker constructor accepts 3 parameters:</p>
+        <ul>
+            <li><code>id</code> is the <code><em>String</em></code> value of a wrapper element's id attribute</li>
+            <li><code>items</code> is an <code><em>Array</em></code> containing items. (The properties of an item are described in section Data Format)</li>
+            <li><code>options</code> is an optional <code><em>Object</em></code> containing a name-value map with options. (described in section Options)</li>
+        </ul>
+        <!--end Parameters -->
+        <!-- Data Format -->
+        <h4>Data Format</h4>
+        <p>The timeline can be provided with data items, which contain the properties start and title</p>
+        <ul>
+            <li><code>start</code> is the current Section Start Time</li>
+            <ul>
+                <li>type: <code><em>String</em></code></li>
+                <li>format: 'hh:mm:ss', 'mm:ss' or 'ss'</li>
+            </ul>
+            <li><code>title</code> is the current Section Title</li>
+            <ul>
+                <li>type: <code><em>String</em></code></li>
+            </ul>
+        </ul>
+        <p>For example:</p>
+        <pre>
+var items = [
+    {"start":    "00:00", "title": "INTRODUCTION"},
+    {"start":    "07:07", "title": "THE HISTORY AND CHRONOLOGY OF CUBISM"},
+    {"start":    "40:55", "title": "PICASSO AND BRAQUE 1907-12"},
+    {"start": "02:40:11", "title": "ICASSO, BRAQUE AND GRIS 1912-14"},
+    {"start": "05:22:32", "title": "THE INFLUENCE OF CUBISM IN FRANCE 1910-14"},
+    {"start": "06:30:50", "title": "CONCLUSION"},
+]</pre>
+        <!--end Data Format -->
+        <!-- Options -->
+        <h4>Options</h4>
+        <p>The following options are available</p>
+        <ul>
+            <li><code>audioElem</code> is the audio element to interact with</li>
+            <ul>
+                <li>type: <code><em>String</em></code></li>
+                <li>format: id attribute (the default value is the first &lt;audio&gt; element of DOM)</li>
+            </ul>
+            <li><code>timelineColor</code> is the timeline Section Title color</li>
+            <ul>
+                <li>type: <code><em>String</em></code></li>
+                <li>format: hex color (the default value is "#CECECF")</li>
+            </ul>
+        </ul>
+        <p>For example:</p>
+        <pre>
+var pp_with_options = new PodPicker('pp-wrapper', items, {
+    "audioElem"    : "podcast_audio",
+    "timelineColor": "#F9441A"
+})</pre>
+        <!--end Options -->
+    </div>
+    <!--end usage -->
+
+    <div id="troubleshoot">
+        <h2>Troubleshoot</h2>
+        <h4>Audio File Format</h4>
+        <p>If audio file format is MP3, it's hard to accurate positioning to a specified time.</p>
+        <p>We recommend using the <span class="link"><a href="https://www.wikiwand.com/en/Advanced_Audio_Coding" target="_blank">AAC</a></span> (.m4a) and <span class="link"><a href="https://www.wikiwand.com/en/Ogg" target="_blank">Ogg</a></span> (.ogg) audio file format</p>
+        <p>For more details, see: <span class="link"><a href="http://forums.codescript.in/javascript/html5-audio-currenttime-attribute-inaccurate-27606.html" target="_blank">1</a></span> and <span class="link"><a href="https://jsfiddle.net/yp3o8cyw/2/" target="_blank">2</a></span></p>
+        <p>For example:</p>
+        <pre>
+&lt;audio id="podcast_audio" controls&gt;
+    &lt;source src="your_audio_file.ogg" type="audio/ogg"&gt; // for Chrome, Firefox 3.6+, Opera 10+
+    &lt;source src="your_audio_file.m4a" type="audio/mp4"&gt; // for Safari, IE 9.0+, 
+&lt;/audio&gt;</pre>
+        <p>For more details, see <span class="link"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility" target="_blank">1</a></span></p>
+        <h5>Audio Converter</h5>
+        <ul>
+            <li>Convert to AAC: <span class="link"><a href="https://itunes.apple.com/cn/app/music-converter/id468990728?l=en&mt=12" target="_blank">Music Converter</a></span></li>
+            <li>Convert to Ogg: <span class="link"><a href="https://itunes.apple.com/cn/app/total-video-converter-lite/id520374433?l=en&mt=12" target="_blank">Total Video Converter Lite</a></span></li>
+            <li>Other options: <span class="link"><a href="https://cloudconvert.com/" target="_blank">CloudConvert</a></span></li>
+        </ul>
+    </div>
+
+    <div id="license">
+        <h2>License</h2>
+        <h5><span class="link"><a href="https://github.com/RoberMac/PodPicker/blob/master/LICENSE" target="_blank">MIT</a></span></h5>
+    </div>
+
+    <div id="about">
+        <h2>About</h2>
+        <h5><span class="link"><a href="https://github.com/RoberMac/PodPicker" target="_blank">GitHub</a></span></h5>
+        <h5><span class="link"><a href="mailto:robertu0717@gmail.com?subject={Pod Picker}" target="_blank">EMAIL</a></span></h5>
+        <h5><span class="link"><a href="" target="_blank"></a></span></h5>
+    </div>
+
+</div>
