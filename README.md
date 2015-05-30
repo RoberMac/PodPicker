@@ -1,4 +1,4 @@
-# Pod Picker
+# [Pod Picker](https://robermac.github.io/PodPicker)
 
 *A Podcast Timeline Generator*
 
@@ -92,4 +92,4 @@ For more details, see [\[1\]](https://developer.mozilla.org/en-US/docs/Web/HTML/
   - Other options: [CloudConvert](https://cloudconvert.com)
 
 ## License
-MIT
+[MIT](https://github.com/RoberMac/PodPicker/blob/master/LICENSE)
