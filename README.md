@@ -59,13 +59,17 @@ The following options are available.
     - format: id attribute (the default value is the first \<audio\> element of DOM) 
   - `timelineColor` is the timeline Section Title color
     - type: *`String`*
-    - format: hex color (the default value is "#CECECF")
+    - format: hex color (the default value is `#CECECF`)
+  - `isShowStartTime` is to determine whether you need to show start time in front of the Section Title
+    - type: *`Boolean`*
+    - format: `true` or `false` (the default value is `false`)
 
 For example:
 ```
   var pp_with_options = new PodPicker('pp-wrapper', items, {
-      "audioElem"    : "podcast_audio",
-      "timelineColor": "#F9441A"
+      "audioElem"      : "podcast_audio",
+      "timelineColor"  : "#F9441A",
+      "isShowStartTime": true
   })
 ```
 

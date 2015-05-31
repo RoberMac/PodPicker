@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2015 RoberTu <robertu0717@gmail.com>
  * @license MIT
- * @version v0.1.0
+ * @version v0.2.0
  */
 
 ;(function (window, document){
@@ -76,7 +76,7 @@
      */
     PodPicker.prototype.setup = function (container, items, options){
 
-        // allow options: 'audioElem', 'timelineColor'
+        // allow options: 'audioElem', 'timelineColor', 'isShowStartTime'
         // check allow options: 'audioElem'
         typeof options.audioElem !== 'undefined'
         ? typeof options.audioElem !== 'string'
@@ -94,13 +94,20 @@
                 : this.throwError('Pod Picker: `options.timelineColor` must be an hex color')
         : null
 
+        // check allow options: 'isShowStartTime'
+        typeof options.isShowStartTime !== 'undefined'
+        ? typeof options.isShowStartTime !== 'boolean'
+            ? this.throwError('Pod Picker: `options.isShowStartTime` must be an boolean')
+            : null
+        : null
+
         // init options
         var audioElem = options.audioElem
                 ? document.getElementById(options.audioElem)
                 : document.getElementsByTagName('audio')[0],
             timelineColor = options.timelineColor || '#CECECF',
+            isShowStartTime = options.isShowStartTime,
             that     = this;
-
 
         /**
          * Create the timeline element and then append it to `container` element
@@ -136,7 +143,8 @@
 
                 var item  = document.createElement('li'),
                     span  = document.createElement('span'),
-                    start = that.convertTime(items[i].start);
+                    start = that.convertTime(items[i].start),
+                    title = isShowStartTime ? items[i].start + ' - ' + items[i].title : items[i].title;
 
                 // Extract all `item` start time and then push it to `that.startTimeSet`
                 that.startTimeSet.push(start)
@@ -147,11 +155,14 @@
                     _item.addEventListener('click', function (){
                         audioElem.play()
                         audioElem.currentTime = start
+                        that.seekingIndex = window.setTimeout(function (){
+                            document.getElementById('pp-pointer').className = 'seeking'
+                        }, 500)
                     })
                 })(span, start)
 
                 item.className = 'pp-item'
-                span.appendChild(document.createTextNode(items[i].title))
+                span.appendChild(document.createTextNode(title))
                 item.appendChild(span)
                 ul.appendChild(item)
             }
@@ -190,9 +201,6 @@
             // Seeking
             audioElem.addEventListener('seeking', function (){
                 audioElem.pause()
-                that.seekingIndex = window.setTimeout(function (){
-                    document.getElementById('pp-pointer').className = 'seeking'
-                }, 500)
             })
             // Seeked
             audioElem.addEventListener('seeked', function (){
