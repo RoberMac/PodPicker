@@ -1,6 +1,5 @@
 #pp-timeline {
     position: relative;
-    line-height: 2;
 }
 #pp-timeline:before {
     content: '';
@@ -15,8 +14,19 @@
         padding: 0 0 0 25px;
         list-style: none;
     }
+        #pp-timeline .pp-item {
+            display: block;
+            padding: 4px 0;
+            line-height: 2;
+        }
         #pp-timeline .pp-item > span {
             position: relative;
+            display: inline-block;
+            max-width: 100%;
+            line-height: normal;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
             cursor: pointer;
             -webkit-transition: all .5s ease-in-out;
             transition: all .5s ease-in-out;
@@ -24,7 +34,7 @@
         #pp-timeline .pp-item > span:hover {
             color: #000;
         }
-        #pp-timeline .pp-item > span.currentChapter {
+        #pp-timeline .pp-item > span.currentSection {
             color: #000;
         }
 
@@ -38,4 +48,32 @@
     background-color: #000;
     -webkit-transition: all .5s ease-in-out;
     transition: all .5s ease-in-out;
+}
+#pp-pointer.seeking {
+    animation: seeking_animate 0.7s infinite alternate linear;
+    -webkit-animation: seeking_animate 0.7s infinite alternate linear;
+}
+@keyframes seeking_animate {
+    0% {
+        opacity: 0;
+        filter: blur(2px);
+        -webkit-filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0px);
+        -webkit-filter: blur(0px);
+    }
+}
+@-webkit-keyframes seeking_animate {
+    0% {
+        opacity: 0;
+        filter: blur(2px);
+        -webkit-filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0px);
+        -webkit-filter: blur(0px);
+    }
 }

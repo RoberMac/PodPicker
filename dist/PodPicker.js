@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2015 RoberTu <robertu0717@gmail.com>
  * @license MIT
- * @version v0.0.2
+ * @version v0.1.0
  */
 
 ;(function (window, document){
@@ -17,6 +17,7 @@
         this.itemsIndex = 0
         this.preTime = 0
         this.startTimeSet = []
+        this.seekingIndex = 0
 
         /**
          * Basic Check
@@ -141,34 +142,19 @@
                 that.startTimeSet.push(start)
 
                 // Register event handlers to `item` element
-                ;(function (_item, index, start){
+                ;(function (_item, start){
                     // Jump to certain time offsets in `audioElem` when user click the item > span element
                     _item.addEventListener('click', function (){
-                        audioElem.pasued
-                        ? audioElem.play()
-                        : null
-                        audioElem.currentTime = start
                         audioElem.play()
-                        that.setPointerPosition(false, index, true)
+                        audioElem.currentTime = start
                     })
-
-                    // set pointer position to current mouseenter item
-                    _item.addEventListener('mouseenter', function (){
-                        that.setPointerPosition(false, index)
-                    })
-                })(span, i + 1, start)
+                })(span, start)
 
                 item.className = 'pp-item'
                 span.appendChild(document.createTextNode(items[i].title))
                 item.appendChild(span)
                 ul.appendChild(item)
             }
-
-            // Register event handlers to `timeline` element
-            timeline.addEventListener('mouseleave', function (){
-                // reset pointer position
-                that.setPointerPosition(true)
-            })
 
             // Register event handlers to `audioElem` element
             audioElem.addEventListener('timeupdate', function (){
@@ -180,9 +166,13 @@
                 if (Math.abs(that.preTime - currentTime) > 1){
                     // user-triggered
                     for (var i = 0; i < len; i++){
-                        currentTime > startTimeSet[i]
-                        ? that.setPointerPosition(false, i + 1, true)
-                        : null
+                        startTimeSet[i + 1] // the last one 
+                        ? currentTime >= startTimeSet[i] && currentTime <= startTimeSet[i + 1]
+                            ? that.setPointerPosition(i + 1)
+                            : null
+                        : currentTime >= startTimeSet[i]
+                            ? that.setPointerPosition(i + 1)
+                            : null
                     }
                 } else {
                     // auto-triggered
@@ -190,12 +180,25 @@
                         currentTime > startTimeSet[i] - 1 
                             && currentTime <= startTimeSet[i] + 1 
                             && that.itemsIndex !== i + 1
-                        ? that.setPointerPosition(false, i + 1, true)
+                        ? that.setPointerPosition(i + 1)
                         : null
                     }
                 }
 
                 that.preTime = currentTime
+            })
+            // Seeking
+            audioElem.addEventListener('seeking', function (){
+                audioElem.pause()
+                that.seekingIndex = window.setTimeout(function (){
+                    document.getElementById('pp-pointer').className = 'seeking'
+                }, 500)
+            })
+            // Seeked
+            audioElem.addEventListener('seeked', function (){
+                window.clearTimeout(that.seekingIndex)
+                audioElem.play()
+                document.getElementById('pp-pointer').removeAttribute('class')
             })
 
             ul.style.color = timelineColor
@@ -212,30 +215,24 @@
     /**
      * Set or reset timeline pointer position
      */
-    PodPicker.prototype.setPointerPosition = function (isResetPosition, index, isSetItemsIndex){
+    PodPicker.prototype.setPointerPosition = function (index){
 
         var item       = document.getElementsByClassName('pp-item'),
             pointer    = document.getElementById('pp-pointer'),
             item_h     = item[0].offsetHeight,
             item_len   = item.length;
 
-        if (isSetItemsIndex){
-            // Set timeline pointer position
-            this.itemsIndex = index
-            // Set timeline section style
-            item[index - 1].children[0].className = 'currentSection'
-            for (var i = 0; i < item_len; i++){
-                i !== index - 1
-                ? item[i].children[0].className = ''
-                : null
-            }
+        // Store current item(Section) index
+        this.itemsIndex = index
+        // Set timeline section style
+        item[index - 1].children[0].className = 'currentSection'
+        for (var i = 0; i < item_len; i++){
+            i !== index - 1
+            ? item[i].children[0].removeAttribute('class')
+            : null
         }
-
-        pointer.style.top = isResetPosition
-                            ? this.itemsIndex === 0
-                                ? '0px' // before play
-                                : (this.itemsIndex * item_h - item_h / 2 - 6) + 'px'
-                            : (index * item_h - item_h / 2 - 6) + 'px'
+        // Set timeline pointer position
+        pointer.style.top = (index * item_h - item_h / 2 - 6) + 'px'
 
     }
 

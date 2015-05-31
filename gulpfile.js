@@ -1,5 +1,6 @@
 var gulp       = require('gulp'),
     concat     = require('gulp-concat'),
+    sourcemaps = require('gulp-sourcemaps'),
     minifyCSS  = require('gulp-minify-css'),
     uglify     = require('gulp-uglify');
 
@@ -12,8 +13,10 @@ var paths = {
 gulp.task('js', function() {
 
     return gulp.src(paths.js)
-        .pipe(uglify({preserveComments: 'some'}))
-        .pipe(concat('PodPicker.min.js'))
+        .pipe(sourcemaps.init())
+            .pipe(uglify({preserveComments: 'some'}))
+            .pipe(concat('PodPicker.min.js'))
+            .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('dist'));
 });
 
@@ -21,8 +24,10 @@ gulp.task('js', function() {
 gulp.task('css', function () {
 
     return gulp.src(paths.css)
-        .pipe(minifyCSS({keepSpecialComments: 1}))
-        .pipe(concat('PodPicker.min.css'))
+        .pipe(sourcemaps.init())
+            .pipe(minifyCSS({keepSpecialComments: 1}))
+            .pipe(concat('PodPicker.min.css'))
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('dist'))
 })
 
