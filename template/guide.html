@@ -89,12 +89,18 @@ var items = [
                 <li>type: <code><em>String</em></code></li>
                 <li>format: hex color (the default value is "#CECECF")</li>
             </ul>
+            <li><code>isShowStartTime</code> is to determine whether you need to show start time in front of the Section Title</li>
+            <ul>
+                <li>type: <code><em>Boolean</em></code></li>
+                <li>format: <code>true</code> or <code>false</code> (the default value is <code>false</code>)</li>
+            </ul>
         </ul>
         <p>For example:</p>
         <pre>
 var pp_with_options = new PodPicker('pp-wrapper', items, {
-    "audioElem"    : "podcast_audio",
-    "timelineColor": "#F9441A"
+    "audioElem"      : "podcast_audio",
+    "timelineColor"  : "#F9441A",
+    "isShowStartTime": true
 })</pre>
         <!--end Options -->
     </div>

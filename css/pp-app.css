@@ -199,6 +199,9 @@ ul {
     #guide p, pre, ul {
         margin-bottom: 16px;
     }
+    #demo h2, #demo h3 {
+        margin: .5em 0;
+    }
 #install p {
     text-align: center;
 }
@@ -234,3 +237,64 @@ ul {
         margin: 1em 0;
     }
 
+
+/* All Mobile Devices */
+@media (max-device-width: 1024px), (max-width: 1024px) {
+    #sidebar {
+        top: 0;
+        right: 0;
+        width: 33.3%;
+        width: calc(100% - 202px);
+        width: -webkit-calc(100% - 202px);
+        height: 80px;
+        margin: 0;
+        font-size: 10px;
+    }
+        #sidebar ul {
+            margin-bottom: 0;
+            padding-left: 0;
+        }
+            #sidebar li {
+                margin-bottom: 0;
+            }
+    #post_picker {
+        display: none;
+    }
+    .space_capsule {
+        top: 80px;
+        width: 90%;
+        left: 5%;
+        height: 80%;
+        height: calc(100% - 87px);
+        height: -webkit-calc(100% - 87px);
+    }
+    #guide, #demo {
+        padding: 10px;
+    }
+    #install code {
+        display: inline-block;
+    }
+    #install #slash {
+        display: block;
+    }
+}
+/* iPad in portrait and landscape */
+@media (min-device-width : 768px) and (max-device-width : 1024px),
+  (min-width: 768px) and (max-width: 1024px) {
+    #sidebar {
+        font-size: 14px;
+    }
+        #sidebar li {
+            margin: 3px 0;
+        }
+    #guide, #demo {
+        padding: 10px 10%;
+    }
+}
+/* iPad in landscape */
+@media (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape),
+  (min-width: 768px) and (max-width: 1024px) and (orientation : landscape) {
+    #guide, #demo {
+        padding: 10px 20%;
+    }
+}
