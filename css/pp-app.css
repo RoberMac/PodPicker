@@ -53,6 +53,23 @@ code, pre {
 ul {
     padding-left: 2em;
 }
+audio {
+    margin: 1em 0;
+    width: 100%;
+    background-color: #000;
+}
+input:focus, button:focus {
+    outline: none;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+button, html input[type="button"], input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
 ::-webkit-scrollbar {
     display: none;
 }
@@ -60,6 +77,13 @@ ul {
 .vertically_center {
     display: table-cell;
     vertical-align: middle;
+}
+/* 右下角 */
+.bottom_right_corner {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    cursor: pointer;
 }
 /* 超連結樣式 */
 .link {
@@ -148,6 +172,15 @@ ul {
     -webkit-transition: all 1.7s ease-in-out;
     transition: all 1.7s ease-in-out;
 }
+.general_animate.ng-enter,
+.general_animate.ng-leave.ng-leave-active,
+.general_animate.ng-hide {
+  opacity:0;
+}
+.general_animate.ng-leave,
+.general_animate.ng-enter.ng-enter-active {
+  opacity:1;
+}
 @keyframes load_animate {
     0% {
         opacity: 0;
@@ -184,7 +217,7 @@ ul {
 }
 
 /* Guide */
-#guide, #demo {
+#guide, #demo, #post {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -192,6 +225,8 @@ ul {
     overflow-x: hidden;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+}
+#guide {
     -webkit-user-select: text;
     -moz-user-select: text;
     user-select: text;
@@ -211,6 +246,7 @@ ul {
 #usage .firstletter{
     float: left;
     margin-right: 0.5em;
+    margin-bottom: 1em;
     font-size: 2.5em;
     line-height: 1em;
     cursor: default;
@@ -223,9 +259,6 @@ ul {
 }
 
 /* Demo */
-#demo audio {
-    width: 100%;
-}
 #demo .episode {
     text-align: center;
 }
@@ -235,6 +268,112 @@ ul {
     }
     #demo #pp-wrapper {
         margin: 1em 0;
+    }
+/* Postpicker*/
+#post {
+    display: table;
+    text-align: center;
+}
+    #post.console {
+        display: block;
+    }
+    #post label {
+        display: block;
+        width: 77px;
+        height: 77px;
+        color: #000;
+        font-size: 2em;
+        font-weight: lighter;
+        line-height: 77px;
+        background-color: #FFF;
+        border: 1px solid #000;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+        #post label:hover{
+            background-color: #000;
+            color: #FFF;
+        }
+    #post #audio_file {
+        display: none;
+    }
+    #post form {
+        width: 60%;
+        margin: 1em auto;
+        border: 1px solid #000;
+    }
+        #post input {
+            display: block;
+            width: 50px;
+            height: 50px;
+            margin: 1em auto;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            background-color: transparent;
+            border: 1px solid #000;
+            overflow: hidden;
+            -webkit-appearance: none;
+        }
+        #post input[type="number"] {
+            display: inline-block;
+            margin: 1em;
+            border-radius: 50%;
+        }
+        #post input[type="text"] {
+            width: 90%;
+        }
+            #post input[type="text"]::-webkit-input-placeholder {
+                letter-spacing: 2px;
+            }
+        #post input[type="submit"] {
+            width: 36px;
+            height: 36px;
+            padding: 5px;
+            line-height: 26px;
+            border-radius: 50%;
+        }
+        #post input[type="submit"]:disabled {
+            border-color: #CECECF;
+            cursor: default;
+        }
+        #post input[type="submit"]:enabled {
+            border-color: #000;
+        }
+    .post_button {
+        width: 37px;
+        margin: 1em;
+        opacity: 0.5;
+        cursor: pointer;
+    }
+        .post_button:hover {
+            opacity: 1;
+        }
+        #rate_icon.reversion .rate_g {
+            fill: #000;
+        }
+        #rate_icon.reversion .rate_path {
+            fill: #FFF;
+        }
+        #items_icon.reversion .items_stroke {
+            stroke: #FFF;
+        }
+        #items_icon.reversion .items_fill_g {
+            fill: #000;
+        }
+        #items_icon.reversion .items_fill {
+            fill: #FFF;
+        }
+    #help {
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        color: #CECECF;
+        font-size: 12px;
+        font-family: sans-serif;
+        line-height: 20px;
+        border: 1px solid #CECECF;
+        border-radius: 50%;
     }
 
 
