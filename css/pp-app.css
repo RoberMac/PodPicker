@@ -46,6 +46,7 @@ code, pre {
     font-size: 85%;
     font-family: "Consolas", "Liberation Mono", "Menlo", "Courier", monospace;
     line-height: 1.6;
+    text-align: left;
     border: 1px solid #CECECF;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
@@ -216,7 +217,7 @@ button, html input[type="button"], input[type="submit"] {
     border: 1px solid #000;
 }
 
-/* Guide */
+/* THE PICKER'S GUIDE */
 #guide, #demo, #post {
     position: absolute;
     width: 100%;
@@ -258,7 +259,7 @@ button, html input[type="button"], input[type="submit"] {
     margin: 1em 0;
 }
 
-/* Demo */
+/* FIRST CONTACT */
 #demo .episode {
     text-align: center;
 }
@@ -269,35 +270,38 @@ button, html input[type="button"], input[type="submit"] {
     #demo #pp-wrapper {
         margin: 1em 0;
     }
-/* Postpicker*/
+/* POSTPICKER */
 #post {
     display: table;
     text-align: center;
+    font-family: "Helvetica Neue","Palatino","Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
 }
     #post.console {
         display: block;
     }
+    /* 輸入框 */
     #post label {
         display: block;
         width: 77px;
         height: 77px;
-        color: #000;
-        font-size: 2em;
-        font-weight: lighter;
-        line-height: 77px;
-        background-color: #FFF;
-        border: 1px solid #000;
-        border-radius: 50%;
+        background-size: 77px;
+        opacity: 0.5;
         cursor: pointer;
     }
-        #post label:hover{
-            background-color: #000;
-            color: #FFF;
+        #post label:hover {
+            opacity: 1;
         }
     #post #audio_file {
         display: none;
     }
-    #post form {
+    #post #console {
+        position: absolute;
+        top: 15%;
+        left: 0;
+        width: 100%;
+        height: 70%;
+    }
+    #post form.newItem {
         width: 60%;
         margin: 1em auto;
         border: 1px solid #000;
@@ -315,6 +319,17 @@ button, html input[type="button"], input[type="submit"] {
             overflow: hidden;
             -webkit-appearance: none;
         }
+        #post form.editItems input {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            margin: .5em;
+            padding: 6px;
+            font-size: 12px;
+        }
+            #post form.editItems input[type="text"] {
+                width: 300px;
+            }
         #post input[type="number"] {
             display: inline-block;
             margin: 1em;
@@ -329,40 +344,90 @@ button, html input[type="button"], input[type="submit"] {
         #post input[type="submit"] {
             width: 36px;
             height: 36px;
-            padding: 5px;
-            line-height: 26px;
-            border-radius: 50%;
+            border: 0px;
+            background-size: 36px;
         }
         #post input[type="submit"]:disabled {
-            border-color: #CECECF;
+            opacity: 0.2;
             cursor: default;
         }
         #post input[type="submit"]:enabled {
-            border-color: #000;
+            opacity: 0.5;
         }
+            #post input[type="submit"]:enabled:hover {
+                opacity: 1;
+            }
+    /* 「加號」背景圖 */
+    .addBGI {
+        background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjA4IiBoZWlnaHQ9IjIwOCIgdmlld0JveD0iMCAwIDIwOCAyMDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjciPjxjaXJjbGUgY3g9IjEwNCIgY3k9IjEwNCIgcj0iMTAwIi8+PHBhdGggZD0iTTY0IDEwNWg4MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTEwNCAxNDR2LTgwIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PC9zdmc+);
+    }
     .post_button {
         width: 37px;
+        height: 37px;
         margin: 1em;
+        display: inline-block;
         opacity: 0.5;
         cursor: pointer;
     }
         .post_button:hover {
             opacity: 1;
         }
-        #rate_icon.reversion .rate_g {
+        /* 章節按鈕 */
+        .post_button.itemsExist, .post_button.itemsExist:hover {
+            opacity: 0.2;
+            cursor: default;
+        }
+        .bottom_right_corner .post_button {
+            margin: 0 3px;
+        }
+        /* SVG */
+        #rate_icon.reversion .rate_g, #items_icon.reversion .items_fill_g {
             fill: #000;
         }
-        #rate_icon.reversion .rate_path {
+        #rate_icon.reversion .rate_path, #items_icon.reversion .items_fill {
             fill: #FFF;
         }
         #items_icon.reversion .items_stroke {
             stroke: #FFF;
         }
-        #items_icon.reversion .items_fill_g {
-            fill: #000;
+    /* CSS Sprite */
+    .sprite {
+        background-image: url(../img/spritesheet.png);
+        background-repeat: no-repeat;
+        background-size: 164px 123px;
+    }
+        .sprite-30s-Skip-Back {
+            background-position: -2.5px -2.5px;
         }
-        #items_icon.reversion .items_fill {
-            fill: #FFF;
+        .sprite-30s-Skip-Forward {
+            background-position: -43.5px -2.5px;
+        }
+        .sprite-5s-Skip-Back {
+            background-position: -84.5px -2.5px;
+        }
+        .sprite-5s-Skip-Forward {
+            background-position: -2.5px -43.5px;
+        }
+        .sprite-Cancel {
+            background-position: -43.5px -43.5px;
+        }
+        .sprite-Clear-Section-Items {
+            background-position: -84.5px -43.5px;
+        }
+        .sprite-Console {
+            background-position: -2.5px -84.5px;
+        }
+        .sprite-Edit-Items {
+            background-position: -43.5px -84.5px;
+        }
+        .sprite-Export {
+            background-position: -84.5px -84.5px;
+        }
+        .sprite-OK {
+            background-position: -125.5px -2.5px;
+        }
+        .sprite-Refresh {
+            background-position: -125.5px -43.5px;
         }
     #help {
         width: 20px;
@@ -375,7 +440,32 @@ button, html input[type="button"], input[type="submit"] {
         border: 1px solid #CECECF;
         border-radius: 50%;
     }
-
+    /* 彈窗 */
+    .popup {
+        position: absolute;
+        top: 2%;
+        left: 19%;
+        width: 62%;
+        height: 96%;
+        text-align: center;
+        background-color: #FFF;
+        -moz-box-shadow: 0 3px 15px 0 rgba(0,0,0,.5);
+        box-shadow: 0 3px 15px 0 rgba(0,0,0,.5);
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        user-select: text;
+    }
+    .popup#alert {
+        display: table;
+    }
+        .popup pre {
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            white-space: pre-line;
+        }
 
 /* All Mobile Devices */
 @media (max-device-width: 1024px), (max-width: 1024px) {
@@ -417,6 +507,7 @@ button, html input[type="button"], input[type="submit"] {
         display: block;
     }
 }
+
 /* iPad in portrait and landscape */
 @media (min-device-width : 768px) and (max-device-width : 1024px),
   (min-width: 768px) and (max-width: 1024px) {

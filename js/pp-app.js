@@ -4,15 +4,15 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
 
     $routeProvider.
       when('/', {
-            templateUrl: 'template/first-contact.html',
+            templateUrl: 'template/first-contact.min.html',
             controller: 'demoController'
       }).
       when('/postpicker', {
-            templateUrl: 'template/post-picker.html',
+            templateUrl: 'template/post-picker.min.html',
             controller: 'postController'
       }).
       when('/guide', {
-            templateUrl: 'template/guide.html',
+            templateUrl: 'template/guide.min.html',
             controller: 'guideController'
       }).
       otherwise({
@@ -25,7 +25,7 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
     // 開場動畫結束
     $scope.isLoaded = true
     // 預加載「The Picker's Guide」模板，預防從「PostPicker」跳轉來時失效
-    $http.get('template/guide.html', {
+    $http.get('template/guide.min.html', {
         cache: $templateCache
     })
 
@@ -33,7 +33,6 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
 .controller('demoController', ['$rootScope', function($rootScope){
 
     $rootScope.currentPage = 'demo'
-
     var itgonglun = [
         {"start": "00:00", "title": "開始"},
         {"start": "01:42", "title": "會員廣告"},
@@ -46,7 +45,9 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
         {"start": "01:49:53", "title": "App 推薦"},
         {"start": "01:52:03", "title": "結束"}
     ]
-    var pp = new PodPicker('pp-wrapper', itgonglun)
+    setTimeout(function (){
+        var pp = new PodPicker('pp-wrapper', itgonglun)
+    }, 0)
 }])
 .controller('postController', ['$scope', '$rootScope', '$timeout', 'store', function($scope, $rootScope, $timeout, store){
 
@@ -54,14 +55,14 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
     $scope.isConsole       = true
     $scope.isLoadAudioFile = true
 
-    var audioFile      = document.getElementById('audio_file'),
-        audioPlayer    = document.getElementById('audio_player'),
-        ngAudioFile    = angular.element(audioFile),
-        ngAudioPlayer  = angular.element(audioPlayer),
-        audioFileSrc,
+    var audioFile   = document.getElementById('audio_file'),
+        ngAudioFile = angular.element(audioFile),
+        audioPlayer, ngAudioPlayer, audioFileSrc,
         audioStore; // 用於存儲該音頻文件編輯／播放信息
 
-    // 事件
+    listenAudioFile()
+
+    // 載入音頻文件
     ngAudioFile.bind('change', function (){
         var file = audioFile.files[0],
             audioFileIndex = file.lastModified + file.name; // 音頻文件 ID，方便存儲數據與本地
@@ -78,35 +79,79 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
         })
         // 恢復上次編輯的數據
         $scope.sectionItems = audioStore.get('sectionItems') || []
+        $scope.sectionItemsData = audioStore.get('sectionItemsData') || []
     })
-    ngAudioPlayer.bind('pause', function (){
-        if (Object.getOwnPropertyNames($scope.newSection).length <= 0){
-            var timeArray  = secNumToTimeArray(audioPlayer.currentTime),
-                timeObject = {
-                    "h": timeArray[0],
-                    "m": timeArray[1],
-                    "s": timeArray[2]
-                };
-            $scope.$apply(function (){
-                $scope.newSection.start = timeObject
-            })
-        }
-    })
-    // 存儲當前播放時間
-    ngAudioPlayer.bind('timeupdate', function (){
-        audioStore.set('lastPlayTime', audioPlayer.currentTime)
-    })
+
     // via http://stackoverflow.com/a/6313008/3786947
     function secNumToTimeArray(secNum){
         var sec_num = parseInt(secNum, 10),
             hours   = Math.floor(sec_num / 3600),
             minutes = Math.floor((sec_num - (hours * 3600)) / 60),
             seconds = sec_num - (hours * 3600) - (minutes * 60);
-
         return [hours, minutes, seconds]
     }
-
-    // 控制音頻播放
+    function secObjToTimeString (secObj){
+        var start_h    = secObj.h,
+            start_m    = secObj.m,
+            start_s    = secObj.s,
+            h          = start_h < 10 ? '0' + start_h : start_h,
+            m          = start_m < 10 ? '0' + start_m : start_m,
+            s          = start_s < 10 ? '0' + start_s : start_s,
+            timeString =  h + ':' + m + ':' + s;
+        return timeString
+    }
+    function refreshAudioFile(){
+        // 刷新元素引用
+        audioPlayer    = document.getElementById('audio_player')
+        ngAudioPlayer  = angular.element(audioPlayer)
+    }
+    function listenAudioFile(){
+        refreshAudioFile()
+        // 判斷是否需要更新時間
+        ngAudioPlayer.bind('pause', function (){
+            if (Object.getOwnPropertyNames($scope.newSection).length <= 0){
+                var timeArray  = secNumToTimeArray(audioPlayer.currentTime),
+                    timeObject = {
+                        "h": timeArray[0],
+                        "m": timeArray[1],
+                        "s": timeArray[2]
+                    };
+                $scope.$apply(function (){
+                    $scope.newSection.start = timeObject
+                })
+            }
+        })
+        // 存儲當前播放時間
+        ngAudioPlayer.bind('timeupdate', function (){
+            audioStore.set('lastPlayTime', audioPlayer.currentTime)
+        })
+    }
+    // 刷新「時間線」
+    function refreshTimeline(){
+        var ngTimeline = angular.element(document.getElementById('pp-timeline'))
+        if (ngTimeline){
+            ngTimeline.remove()
+        }
+        var pp = new PodPicker('pp-wrapper', $scope.sectionItemsData, {
+            "isShowStartTime": true
+        })
+    }
+    // 刷新章節（導出）數據
+    function refreshSectionItemsData (){
+        var len   = $scope.sectionItems.length,
+            cache = [];
+        for (var i = 0; i < len; i++){
+            cache.push({
+                'start': secObjToTimeString($scope.sectionItems[i].original_start),
+                'title': $scope.sectionItems[i].title
+            })
+        }
+        $scope.sectionItemsData = cache
+    }
+    /**
+     * 音頻控制
+     *
+     */
     $scope.skip = function (sec){
         audioPlayer.currentTime += sec
         audioPlayer.play()
@@ -129,57 +174,96 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
                 "m": timeArray[1],
                 "s": timeArray[2]
             };
-        $scope.newSection.start = timeObject
+        $scope.newSection.original_start = timeObject
         document.getElementById('section_title').focus()
     }
     $scope.toggleSectionItems = function (){
+        var isShowSectionItems = $scope.isShowSectionItems,
+            isEmpty            = $scope.sectionItems.length > 0;
+        if (!isShowSectionItems && isEmpty){
+            // 移除 `audioPlayer` 元素上的所有 Event Listeners
+            ngAudioPlayer.replaceWith(ngAudioPlayer.clone())
+            refreshAudioFile()
+            refreshTimeline()
+        } else if (isShowSectionItems && isEmpty){
+            // 還原上次播放時間
+            audioPlayer.currentTime = audioStore.get('lastPlayTime')
+            listenAudioFile()
+        } else {
+            return
+        }
         $scope.isShowSectionItems = !$scope.isShowSectionItems
     }
+    $scope.toggleEditSectionItems = function (){
+        if ($scope.isEditSectionItems){
+            // 更新「時間線」
+            $scope.sectionItems = angular.copy($scope.editSectionItems)
+            refreshSectionItemsData()
+            refreshTimeline()
+        } else {
+            $scope.editSectionItems = angular.copy($scope.sectionItems)
+        }
+        $scope.isEditSectionItems = !$scope.isEditSectionItems
+    }
+    $scope.undoSectionItems = function (){
+        $scope.isEditSectionItems = !$scope.isEditSectionItems
+    }
+    $scope.deleteItem = function (index){
+        $scope.sectionItems.splice(index, 1)
+        $scope.sectionItemsData.splice(index, 1)
+    }
+    $scope.clearSectionItems = function (){
+        $scope.toggleSectionItems()
+        $scope.sectionItems = []
+        $scope.sectionItemsData = []
+        audioStore.remove('sectionItems')
+        audioStore.remove('sectionItemsData')
+        $scope.isEditSectionItems = !$scope.isEditSectionItems
+        $scope.isShowAlert = false
+    }
+    $scope.toggleShowAlert = function (){
+        $scope.isShowAlert = !$scope.isShowAlert
+    }
+    $scope.toggleItemsData = function (){
+        $scope.isShowItemsData = !$scope.isShowItemsData
+    }
     /* 章節 */
-    $scope.sectionItems    = []
-    $scope.newSection = {}
+    $scope.sectionItems       = []
+    $scope.sectionItemsData   = []
+    $scope.editSectionItems   = []
+    $scope.newSection         = {}
     $scope.isShowSectionItems = false
+    $scope.isEditSectionItems = false
+    $scope.isShowItemsData    = false
+    $scope.isShowAlert        = false
     $scope.sectionSubmit = function (){
-        var start_h    = $scope.newSection.start.h,
-            start_m    = $scope.newSection.start.m,
-            start_s    = $scope.newSection.start.s,
-            h          = start_h < 10 ? '0' + start_h : start_h,
-            m          = start_m < 10 ? '0' + start_m : start_m,
-            s          = start_s < 10 ? '0' + start_s : start_s,
-            timeString =  h + ':' + m + ':' + s,
-            itemsIcon  = angular.element(document.getElementById('items_icon'));
-
-        $scope.sectionItems.push({
-            "start": timeString,
-            "title": $scope.newSection.title
+        // 存儲「新章節」
+        $scope.sectionItems.push($scope.newSection)
+        $scope.sectionItemsData.push({
+            'start': secObjToTimeString($scope.newSection.original_start),
+            'title': $scope.newSection.title
         })
+        // 存儲完成，清除數據
+        $scope.newSection = {}
         // 動畫提醒
+        var itemsIcon  = angular.element(document.getElementById('items_icon'));
         itemsIcon.addClass('reversion')
         $timeout(function (){
             itemsIcon.removeClass('reversion')
+            // 繼續播放
+            audioPlayer.play()
         }, 717)
-        // 編輯完成後清除數據
-        $scope.newSection = {}
-        // 繼續播放
-        audioPlayer.play()
-        // 存儲當前編輯的數據於本地
-        audioStore.set('sectionItems', $scope.sectionItems)
     }
+    // 監聽 `sectionItems` & `sectionItemsData` 改動，自動存儲於本地
+    $scope.$watchCollection('sectionItems', function (newVal){
+        console.log('sectionItems Change', newVal)
+        audioStore.set('sectionItems', newVal)
+    })
+    $scope.$watchCollection('sectionItemsData', function (newVal){
+        console.log('sectionItemsData Change', newVal)
+        audioStore.set('sectionItemsData', newVal)
+    })
 }])
-.directive('ppItems', function (){
-    return {
-        restrict: 'E',
-        replace : true,
-        template: '<div id="">'
-                +     '<div id="pp-wrapper"></div>'
-                + '</div>',
-        link: function (scope, elem, attr){
-            var pp = new PodPicker('pp-wrapper', scope.sectionItems, {
-                "isShowStartTime": true
-            })
-        }
-    }
-})
 .controller('guideController', ['$rootScope', function($rootScope){
 
     $rootScope.currentPage = 'guide'
