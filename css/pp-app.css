@@ -84,6 +84,7 @@ button, html input[type="button"], input[type="submit"] {
     position: absolute;
     right: 4px;
     bottom: 4px;
+    width: 47px;
     cursor: pointer;
 }
 /* 超連結樣式 */
@@ -175,11 +176,16 @@ button, html input[type="button"], input[type="submit"] {
 }
 .general_animate.ng-enter,
 .general_animate.ng-leave.ng-leave-active,
-.general_animate.ng-hide {
+.general_animate.ng-hide,
+.faster_animate.ng-enter,
+.faster_animate.ng-leave.ng-leave-active,
+.faster_animate.ng-hide {
   opacity:0;
 }
 .general_animate.ng-leave,
-.general_animate.ng-enter.ng-enter-active {
+.general_animate.ng-enter.ng-enter-active,
+.faster_animate.ng-leave,
+.faster_animate.ng-enter.ng-enter-active {
   opacity:1;
 }
 @keyframes load_animate {
@@ -288,9 +294,6 @@ button, html input[type="button"], input[type="submit"] {
         opacity: 0.5;
         cursor: pointer;
     }
-        #post label:hover {
-            opacity: 1;
-        }
     #post #audio_file {
         display: none;
     }
@@ -304,9 +307,9 @@ button, html input[type="button"], input[type="submit"] {
     #post form.newItem {
         width: 60%;
         margin: 1em auto;
-        border: 1px solid #000;
+        border: 1px solid #555;
     }
-        #post input {
+        input {
             display: block;
             width: 50px;
             height: 50px;
@@ -315,11 +318,10 @@ button, html input[type="button"], input[type="submit"] {
             font-size: 16px;
             text-align: center;
             background-color: transparent;
-            border: 1px solid #000;
-            overflow: hidden;
+            border: 1px solid #555;
             -webkit-appearance: none;
         }
-        #post form.editItems input {
+        form.editItems input {
             display: inline-block;
             width: 36px;
             height: 36px;
@@ -327,36 +329,42 @@ button, html input[type="button"], input[type="submit"] {
             padding: 6px;
             font-size: 12px;
         }
-            #post form.editItems input[type="text"] {
+            form.editItems input[type="text"] {
                 width: 300px;
+                text-align: left;
             }
-        #post input[type="number"] {
+        input[type="number"] {
             display: inline-block;
             margin: 1em;
             border-radius: 50%;
         }
-        #post input[type="text"] {
+        input[type="text"] {
             width: 90%;
         }
-            #post input[type="text"]::-webkit-input-placeholder {
+            input[type="text"]::-webkit-input-placeholder {
                 letter-spacing: 2px;
             }
-        #post input[type="submit"] {
+        input[type="submit"] {
             width: 36px;
             height: 36px;
             border: 0px;
             background-size: 36px;
         }
-        #post input[type="submit"]:disabled {
+        input[type="submit"]:disabled {
             opacity: 0.2;
             cursor: default;
         }
-        #post input[type="submit"]:enabled {
+        input[type="submit"]:enabled {
             opacity: 0.5;
         }
-            #post input[type="submit"]:enabled:hover {
-                opacity: 1;
-            }
+        input[type="number"]:focus, input[type="text"]:focus {
+            border-color: #000;
+            -moz-box-shadow: 0 3px 15px 0 rgba(0,0,0,.5);
+            box-shadow: 0 3px 15px 0 rgba(0,0,0,.5);
+        }
+        #post label:hover, input[type="submit"]:enabled:hover {
+            opacity: 1;
+        }
     /* 「加號」背景圖 */
     .addBGI {
         background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjA4IiBoZWlnaHQ9IjIwOCIgdmlld0JveD0iMCAwIDIwOCAyMDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjciPjxjaXJjbGUgY3g9IjEwNCIgY3k9IjEwNCIgcj0iMTAwIi8+PHBhdGggZD0iTTY0IDEwNWg4MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTEwNCAxNDR2LTgwIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PC9zdmc+);
@@ -380,55 +388,92 @@ button, html input[type="button"], input[type="submit"] {
         .bottom_right_corner .post_button {
             margin: 0 3px;
         }
-        /* SVG */
-        #rate_icon.reversion .rate_g, #items_icon.reversion .items_fill_g {
-            fill: #000;
-        }
-        #rate_icon.reversion .rate_path, #items_icon.reversion .items_fill {
-            fill: #FFF;
-        }
-        #items_icon.reversion .items_stroke {
-            stroke: #FFF;
-        }
     /* CSS Sprite */
     .sprite {
         background-image: url(../img/spritesheet.png);
         background-repeat: no-repeat;
-        background-size: 164px 123px;
+        background-size: 779px 41px;
     }
         .sprite-30s-Skip-Back {
             background-position: -2.5px -2.5px;
         }
+
         .sprite-30s-Skip-Forward {
             background-position: -43.5px -2.5px;
         }
+
         .sprite-5s-Skip-Back {
             background-position: -84.5px -2.5px;
         }
+
         .sprite-5s-Skip-Forward {
-            background-position: -2.5px -43.5px;
-        }
-        .sprite-Cancel {
-            background-position: -43.5px -43.5px;
-        }
-        .sprite-Clear-Section-Items {
-            background-position: -84.5px -43.5px;
-        }
-        .sprite-Console {
-            background-position: -2.5px -84.5px;
-        }
-        .sprite-Edit-Items {
-            background-position: -43.5px -84.5px;
-        }
-        .sprite-Export {
-            background-position: -84.5px -84.5px;
-        }
-        .sprite-OK {
             background-position: -125.5px -2.5px;
         }
-        .sprite-Refresh {
-            background-position: -125.5px -43.5px;
+
+        .sprite-Cancel {
+            background-position: -166.5px -2.5px;
         }
+
+        .sprite-Clear-Section-Items {
+            background-position: -207.5px -2.5px;
+        }
+
+        .sprite-Console {
+            background-position: -248.5px -2.5px;
+        }
+
+        .sprite-Delete-Item {
+            background-position: -289.5px -2.5px;
+        }
+
+        .sprite-Delete-Item-Before {
+            background-position: -330.5px -2.5px;
+        }
+
+        .sprite-Delete-Item-Selected {
+            background-position: -371.5px -2.5px;
+        }
+
+        .sprite-Edit-Items {
+            background-position: -412.5px -2.5px;
+        }
+
+        .sprite-Export {
+            background-position: -453.5px -2.5px;
+        }
+
+        .sprite-Export-Selected {
+            background-position: -494.5px -2.5px;
+        }
+
+        .sprite-OK {
+            background-position: -535.5px -2.5px;
+        }
+
+        .sprite-Rate-2x {
+            background-position: -576.5px -2.5px;
+        }
+
+        .sprite-Rate-2x-Selected {
+            background-position: -617.5px -2.5px;
+        }
+
+        .sprite-Refresh {
+            background-position: -658.5px -2.5px;
+        }
+
+        .sprite-Section-Items {
+            background-position: -699.5px -2.5px;
+        }
+
+        .sprite-Section-Items-Selected {
+            background-position: -740.5px -2.5px;
+        }
+            /* 下載數據 */
+            #downloadItemsData .sprite-Export {
+                -webkit-transform: rotate(-180deg);
+                transform: rotate(-180deg);
+            }
     #help {
         width: 20px;
         height: 20px;
@@ -455,15 +500,41 @@ button, html input[type="button"], input[type="submit"] {
         -moz-user-select: text;
         user-select: text;
     }
+    .popup .popup_inner {
+        position: absolute;
+        top: 20%;
+        top: calc(5.5em);
+        width: 100%;
+        height: 80%;
+        height: calc(100% - 5.5em);
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+        /* 刪除單個章節數據 */
+        .popup .popup_inner > div {
+            position: relative;
+        }
+        .popup .popup_inner .delete_item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, .8);
+        }
+            .popup .popup_inner .delete_item .post_button {
+                margin: 5px 0;
+                background-position: -289.5px -2.5px;
+                -webkit-transition: none;
+                transition: none;
+            }
+                .popup .popup_inner .delete_item .post_button:hover {
+                    background-position: -371.5px -2.5px;
+                }
     .popup#alert {
         display: table;
     }
         .popup pre {
-            position: absolute;
-            top: 5%;
             left: 5%;
             width: 90%;
-            height: 90%;
             white-space: pre-line;
         }
 

@@ -82,6 +82,166 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
         $scope.sectionItemsData = audioStore.get('sectionItemsData') || []
     })
 
+
+    /**
+     * 音頻控制
+     *
+     */
+    $scope.skip = function (sec){
+        audioPlayer.currentTime += sec
+        audioPlayer.play()
+    }
+    $scope.toggleRate = function (){
+        var rateIcon = angular.element(document.getElementById('rate_icon'))
+        if (audioPlayer.playbackRate === 2){
+            audioPlayer.playbackRate = 1
+            rateIcon.removeClass('sprite-Rate-2x-Selected')
+            rateIcon.addClass('sprite-Rate-2x')
+        } else {
+            audioPlayer.playbackRate = 2
+            rateIcon.removeClass('sprite-Rate-2x')
+            rateIcon.addClass('sprite-Rate-2x-Selected')
+        }
+        audioPlayer.play()
+    }
+    $scope.refreshStartTime = function (){
+        var timeArray = secNumToTimeArray(audioPlayer.currentTime),
+            timeObject = {
+                "h": timeArray[0],
+                "m": timeArray[1],
+                "s": timeArray[2]
+            };
+        $scope.newSection.original_start = timeObject
+        document.getElementById('section_title').focus()
+    }
+
+
+    /**
+     * 章節編輯
+     *
+     */
+    /* 章節 */
+    $scope.sectionItems       = []
+    $scope.sectionItemsData   = []
+    $scope.editSectionItems   = []
+    $scope.newSection         = {}
+    $scope.isShowSectionItems = false
+    $scope.isEditSectionItems = false
+    $scope.isShowItemsData    = false
+    $scope.isShowAlert        = false
+    $scope.isDeleteItem       = false
+    $scope.sectionSubmit = function (){
+        // 存儲「新章節」
+        $scope.sectionItems.push($scope.newSection)
+        $scope.sectionItemsData.push({
+            'start': secObjToTimeString($scope.newSection.original_start),
+            'title': $scope.newSection.title
+        })
+        // 存儲完成，清除數據
+        $scope.newSection = {}
+        // 動畫提醒
+        var itemsIcon  = angular.element(document.getElementById('items_icon'));
+        itemsIcon.removeClass('sprite-Section-Items')
+        itemsIcon.addClass('sprite-Section-Items-Selected')
+        $timeout(function (){
+            itemsIcon.removeClass('sprite-Section-Items-Selected')
+            itemsIcon.addClass('sprite-Section-Items')
+            // 繼續播放
+            audioPlayer.play()
+        }, 717)
+    }
+    /* 顯示／隱藏「時間線」演示 */
+    $scope.toggleSectionItems = function (){
+        var isShowSectionItems = $scope.isShowSectionItems,
+            isEmpty            = $scope.sectionItems.length > 0;
+        if (!isShowSectionItems && isEmpty){
+            // 移除 `audioPlayer` 元素上的所有 Event Listeners
+            ngAudioPlayer.replaceWith(ngAudioPlayer.clone())
+            refreshAudioFile()
+            refreshTimeline()
+        } else if (isShowSectionItems && isEmpty){
+            // 還原上次播放時間
+            audioPlayer.currentTime = audioStore.get('lastPlayTime')
+            listenAudioFile()
+        } else {
+            return
+        }
+        $scope.isShowSectionItems = !$scope.isShowSectionItems
+    }
+    /* 顯示／隱藏（保存）數據項 */
+    $scope.toggleEditSectionItems = function (){
+        if ($scope.isEditSectionItems){
+            // 更新「時間線」
+            $scope.sectionItems = angular.copy($scope.editSectionItems)
+            refreshSectionItemsData()
+            refreshTimeline()
+        } else {
+            $scope.editSectionItems = angular.copy($scope.sectionItems)
+            $scope.isDeleteItem = false
+        }
+        $scope.isEditSectionItems = !$scope.isEditSectionItems
+    }
+    /* 顯示／隱藏刪除按鈕 */
+    $scope.toggleDeleteItem = function (){
+        $scope.isDeleteItem = !$scope.isDeleteItem
+    }
+    /* 刪除單項數據 */
+    $scope.deleteItem = function (index){
+        $scope.editSectionItems.splice(index, 1)        
+    }
+    // 監聽 `sectionItems` & `sectionItemsData` 改動，自動存儲於本地
+    $scope.$watchCollection('sectionItems', function (newVal){
+        audioStore.set('sectionItems', newVal)
+    })
+    $scope.$watchCollection('sectionItemsData', function (newVal){
+        audioStore.set('sectionItemsData', newVal)
+    })
+
+
+    /**
+     * 提示框
+     *
+     */
+    $scope.alertTitle = ''
+    $scope.alertAction = ''
+    $scope.ok = function (){
+        if ($scope.alertAction === 'clearSectionItems'){
+            /* 清空所有數據 */
+            $scope.toggleSectionItems()
+            $scope.sectionItems = []
+            $scope.sectionItemsData = []
+        }
+        $scope.isEditSectionItems = !$scope.isEditSectionItems
+        $scope.isShowAlert = false
+    }
+    /* 顯示／隱藏提示框 */
+    $scope.toggleShowAlert = function (title, action){
+        // 當數據沒改動過，直接退出
+        if (title === 'UNDO ALL CHANGES' && angular.equals($scope.editSectionItems, $scope.sectionItems)){
+            $scope.isEditSectionItems = !$scope.isEditSectionItems
+            $scope.isShowAlert = false
+            return;
+        }
+        $scope.alertTitle = title ? title : null
+        $scope.alertAction = action ? action : null
+        $scope.isShowAlert = !$scope.isShowAlert
+    }
+    /* 顯示／隱藏數據 */
+    $scope.toggleItemsData = function (){
+        if (!$scope.isShowItemsData){
+            var blob = new Blob([JSON.stringify($scope.sectionItemsData)], {type: "application/json"}),
+                url  = URL.createObjectURL(blob),
+                elem = document.getElementById('downloadItemsData')
+            elem.download = 'items_data.json'
+            elem.href     = url
+        }
+        $scope.isShowItemsData = !$scope.isShowItemsData
+    }
+
+    /**
+     * Helper
+     *
+     */
     // via http://stackoverflow.com/a/6313008/3786947
     function secNumToTimeArray(secNum){
         var sec_num = parseInt(secNum, 10),
@@ -148,121 +308,6 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
         }
         $scope.sectionItemsData = cache
     }
-    /**
-     * 音頻控制
-     *
-     */
-    $scope.skip = function (sec){
-        audioPlayer.currentTime += sec
-        audioPlayer.play()
-    }
-    $scope.toggleRate = function (){
-        var rateIcon = angular.element(document.getElementById('rate_icon'))
-        if (audioPlayer.playbackRate === 2){
-            audioPlayer.playbackRate = 1
-            rateIcon.removeClass('reversion')
-        } else {
-            audioPlayer.playbackRate = 2
-            rateIcon.addClass('reversion')
-        }
-        audioPlayer.play()
-    }
-    $scope.refreshStartTime = function (){
-        var timeArray = secNumToTimeArray(audioPlayer.currentTime),
-            timeObject = {
-                "h": timeArray[0],
-                "m": timeArray[1],
-                "s": timeArray[2]
-            };
-        $scope.newSection.original_start = timeObject
-        document.getElementById('section_title').focus()
-    }
-    $scope.toggleSectionItems = function (){
-        var isShowSectionItems = $scope.isShowSectionItems,
-            isEmpty            = $scope.sectionItems.length > 0;
-        if (!isShowSectionItems && isEmpty){
-            // 移除 `audioPlayer` 元素上的所有 Event Listeners
-            ngAudioPlayer.replaceWith(ngAudioPlayer.clone())
-            refreshAudioFile()
-            refreshTimeline()
-        } else if (isShowSectionItems && isEmpty){
-            // 還原上次播放時間
-            audioPlayer.currentTime = audioStore.get('lastPlayTime')
-            listenAudioFile()
-        } else {
-            return
-        }
-        $scope.isShowSectionItems = !$scope.isShowSectionItems
-    }
-    $scope.toggleEditSectionItems = function (){
-        if ($scope.isEditSectionItems){
-            // 更新「時間線」
-            $scope.sectionItems = angular.copy($scope.editSectionItems)
-            refreshSectionItemsData()
-            refreshTimeline()
-        } else {
-            $scope.editSectionItems = angular.copy($scope.sectionItems)
-        }
-        $scope.isEditSectionItems = !$scope.isEditSectionItems
-    }
-    $scope.undoSectionItems = function (){
-        $scope.isEditSectionItems = !$scope.isEditSectionItems
-    }
-    $scope.deleteItem = function (index){
-        $scope.sectionItems.splice(index, 1)
-        $scope.sectionItemsData.splice(index, 1)
-    }
-    $scope.clearSectionItems = function (){
-        $scope.toggleSectionItems()
-        $scope.sectionItems = []
-        $scope.sectionItemsData = []
-        audioStore.remove('sectionItems')
-        audioStore.remove('sectionItemsData')
-        $scope.isEditSectionItems = !$scope.isEditSectionItems
-        $scope.isShowAlert = false
-    }
-    $scope.toggleShowAlert = function (){
-        $scope.isShowAlert = !$scope.isShowAlert
-    }
-    $scope.toggleItemsData = function (){
-        $scope.isShowItemsData = !$scope.isShowItemsData
-    }
-    /* 章節 */
-    $scope.sectionItems       = []
-    $scope.sectionItemsData   = []
-    $scope.editSectionItems   = []
-    $scope.newSection         = {}
-    $scope.isShowSectionItems = false
-    $scope.isEditSectionItems = false
-    $scope.isShowItemsData    = false
-    $scope.isShowAlert        = false
-    $scope.sectionSubmit = function (){
-        // 存儲「新章節」
-        $scope.sectionItems.push($scope.newSection)
-        $scope.sectionItemsData.push({
-            'start': secObjToTimeString($scope.newSection.original_start),
-            'title': $scope.newSection.title
-        })
-        // 存儲完成，清除數據
-        $scope.newSection = {}
-        // 動畫提醒
-        var itemsIcon  = angular.element(document.getElementById('items_icon'));
-        itemsIcon.addClass('reversion')
-        $timeout(function (){
-            itemsIcon.removeClass('reversion')
-            // 繼續播放
-            audioPlayer.play()
-        }, 717)
-    }
-    // 監聽 `sectionItems` & `sectionItemsData` 改動，自動存儲於本地
-    $scope.$watchCollection('sectionItems', function (newVal){
-        console.log('sectionItems Change', newVal)
-        audioStore.set('sectionItems', newVal)
-    })
-    $scope.$watchCollection('sectionItemsData', function (newVal){
-        console.log('sectionItemsData Change', newVal)
-        audioStore.set('sectionItemsData', newVal)
-    })
 }])
 .controller('guideController', ['$rootScope', function($rootScope){
 
