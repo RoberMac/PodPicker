@@ -83,9 +83,9 @@ For example:
 ## [Postpicker](https://robermac.github.io/PodPicker/#!/postpicker)
 *A Tool To Generate [Data Items](https://github.com/RoberMac/PodPicker#data-format) Relatively Quickly*
 #### Getting Started
-- [Import an audio file](https://raw.githubusercontent.com/RoberMac/PodPicker/master/img/step-1.gif) (Supports Ogg and AAC audio formats [\[1\]](https://github.com/RoberMac/PodPicker#troubleshoot))
-- [Create a new section](https://raw.githubusercontent.com/RoberMac/PodPicker/master/img/step-2.gif)
-- [Export Data Items](https://raw.githubusercontent.com/RoberMac/PodPicker/master/img/step-3.gif)
+1. [Import an audio file](https://raw.githubusercontent.com/RoberMac/PodPicker/master/img/step-1.gif) (Supports Ogg and AAC audio formats [\[1\]](https://github.com/RoberMac/PodPicker#troubleshoot))
+2. [Create a new section](https://raw.githubusercontent.com/RoberMac/PodPicker/master/img/step-2.gif)
+3. [Export Data Items](https://raw.githubusercontent.com/RoberMac/PodPicker/master/img/step-3.gif)
 
 ## Troubleshoot
 #### Audio File Format
