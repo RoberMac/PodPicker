@@ -5,15 +5,16 @@
 ## Install
   - NPM: `npm install podpicker`
   - Bower: `bower install podpicker`
+  - jsDelvr: `//cdn.jsdelivr.net/podpicker/latest/PodPicker.min.js` `//cdn.jsdelivr.net/podpicker/latest/PodPicker.min.css`
 
 ## Usage
-
+#### Getting Started
 - Include the scripts and style sheets in the \<head\> section
 ```html
 <head>
     ...
-    <link rel="stylesheet" type="text/css" href="PodPicker.min.css">
-    <script type="text/javascript" src="PodPicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/podpicker/latest/PodPicker.min.css">
+    <script type="text/javascript" src="//cdn.jsdelivr.net/podpicker/latest/PodPicker.min.js"></script>
 </head>
 ```
 
@@ -25,8 +26,13 @@
 - Initialization the Pod Picker Timeline
 ```html
 <script type="text/javascript">
-    var pp = new PodPicker('pp-wrapper', items [, options]) // described in the following
+    var pp = new PodPicker('pp-wrapper', [{'start': '00:00', 'title': 'INTRODUCTION'}]) // described in the following
 </script>
+```
+
+### Parameters
+```js
+var pp = new PodPicker(id, items, options)
 ```
 The PodPicker constructor accepts 3 parameters:
 - `id` is the *`String`* value of a wrapper element's id attribute
@@ -34,7 +40,7 @@ The PodPicker constructor accepts 3 parameters:
 - `options` is an **optional** *`Object`* containing a name-value map with options. (described in section **Options**)
 
 #### Data Format
-The timeline can be provided with data items, which contain the properties `start` and `title`
+The timeline must be provided with data items, which contain the properties `start` and `title`
   - `start` is the current Section Start Time
     - type: *`String`*
     - format: 'hh:mm:ss', 'mm:ss' or 'ss'
@@ -52,6 +58,7 @@ For example:
     {"start": "06:30:50", "title": "CONCLUSION"},
   ]
 ```
+
 #### Options
 The following options are available.
   - `audioElem` is the audio element to interact with
@@ -72,6 +79,13 @@ For example:
       "isShowStartTime": true
   })
 ```
+
+## [Postpicker](https://robermac.github.io/PodPicker/#!/postpicker)
+*A Tool To Generate [Data Items](https://github.com/RoberMac/PodPicker#data-format) Relatively Quickly*
+#### Getting Started
+- [Import an audio file](./img/step-1.gif) (Supports Ogg and AAC audio formats [\[1\]](https://github.com/RoberMac/PodPicker#troubleshoot))
+- [Create a new section](./img/step-2.gif)
+- [Export Data Items](./img/step-3.gif)
 
 ## Troubleshoot
 #### Audio File Format
