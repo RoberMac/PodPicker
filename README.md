@@ -5,7 +5,7 @@
 ## Install
   - NPM: `npm install podpicker`
   - Bower: `bower install podpicker`
-  - jsDelvr: `//cdn.jsdelivr.net/podpicker/latest/PodPicker.min.js` `//cdn.jsdelivr.net/podpicker/latest/PodPicker.min.css`
+  - jsDelivr: `//cdn.jsdelivr.net/podpicker/latest/PodPicker.min.js` `//cdn.jsdelivr.net/podpicker/latest/PodPicker.min.css`
 
 ## Usage
 #### Getting Started
