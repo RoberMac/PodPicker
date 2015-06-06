@@ -121,15 +121,15 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
      *
      */
     /* 章節 */
-    $scope.sectionItems       = []
-    $scope.sectionItemsData   = []
-    $scope.editSectionItems   = []
-    $scope.newSection         = {}
-    $scope.isShowSectionItems = false
-    $scope.isEditSectionItems = false
-    $scope.isShowItemsData    = false
-    $scope.isShowAlert        = false
-    $scope.isDeleteItem       = false
+    $scope.sectionItems       = []    // 緩存數據項（用於編輯）
+    $scope.sectionItemsData   = []    // 緩存數據項（用於「時間線」／導出）
+    $scope.editSectionItems   = []    // 緩存正在編輯的數據項
+    $scope.newSection         = {}    // 新增數據項
+    $scope.isShowSectionItems = false // 是否顯示時間線
+    $scope.isEditSectionItems = false // 是否顯示編輯項
+    $scope.isShowItemsData    = false // 是否顯示「導出」數據
+    $scope.isShowAlert        = false // 是否顯示提示框
+    $scope.isDeleteItem       = false // 是否顯示刪除數據項按鈕
     $scope.sectionSubmit = function (){
         // 存儲「新章節」
         $scope.sectionItems.push($scope.newSection)
@@ -153,13 +153,15 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
     /* 顯示／隱藏「時間線」演示 */
     $scope.toggleSectionItems = function (){
         var isShowSectionItems = $scope.isShowSectionItems,
-            isEmpty            = $scope.sectionItems.length > 0;
-        if (!isShowSectionItems && isEmpty){
+            isEmpty            = $scope.sectionItems.length <= 0;
+        if (!isShowSectionItems && !isEmpty){
+            // 顯示「時間線」
             // 移除 `audioPlayer` 元素上的所有 Event Listeners
             ngAudioPlayer.replaceWith(ngAudioPlayer.clone())
             refreshAudioFile()
             refreshTimeline()
-        } else if (isShowSectionItems && isEmpty){
+        } else if (isShowSectionItems && !isEmpty){
+            // 隱藏時間線
             // 還原上次播放時間
             audioPlayer.currentTime = audioStore.get('lastPlayTime')
             listenAudioFile()
@@ -168,14 +170,21 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
         }
         $scope.isShowSectionItems = !$scope.isShowSectionItems
     }
-    /* 顯示／隱藏（保存）數據項 */
+    /* 顯示／隱藏（保存）編輯數據項 */
     $scope.toggleEditSectionItems = function (){
+
         if ($scope.isEditSectionItems){
+            if ($scope.editSectionItems.length <= 0){
+                $scope.toggleShowAlert('DELETE ALL DATA', 'clearSectionItems')
+                return;
+            }
+            // 隱藏編輯數據項
             // 更新「時間線」
             $scope.sectionItems = angular.copy($scope.editSectionItems)
             refreshSectionItemsData()
             refreshTimeline()
         } else {
+            // 顯示編輯數據項
             $scope.editSectionItems = angular.copy($scope.sectionItems)
             $scope.isDeleteItem = false
         }
@@ -222,6 +231,7 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
             $scope.isShowAlert = false
             return;
         }
+        // 設置「提示框」標題 & 「同意」後的動作
         $scope.alertTitle = title ? title : null
         $scope.alertAction = action ? action : null
         $scope.isShowAlert = !$scope.isShowAlert

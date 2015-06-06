@@ -17,7 +17,7 @@
             <span ng-click="skip(30)" class="sprite sprite-30s-Skip-Forward post_button faster_animate"></span>
             <span id="rate_icon" ng-click="toggleRate()" class="sprite sprite-Rate-2x post_button faster_animate"></span>
             <span ng-click="refreshStartTime(30)" class="sprite sprite-Refresh post_button faster_animate"></span>
-            <span id="items_icon" ng-click="toggleSectionItems()" class="sprite sprite-Section-Items post_button faster_animate"></span>
+            <span id="items_icon" ng-click="toggleSectionItems()" class="sprite sprite-Section-Items post_button faster_animate" ng-class="{'emptyItems': sectionItems.length <= 0}"></span>
             <!-- 新增數據項 -->
             <form class="newItem" novalidate ng-submit="sectionSubmit()" name="form">
                 <div>
@@ -44,7 +44,7 @@
     </div>
 </a>
 <!-- 側邊按鈕-->
-<div ng-show="isShowSectionItems && !isShowAlert" class="bottom_right_corner general_animate">
+<div ng-show="isShowSectionItems && !isShowAlert" class="bottom_right_corner faster_animate">
     <!-- 返回控制台按鈕 & 編輯數據按鈕 -->
     <div ng-show="!isEditSectionItems && !isShowItemsData">
         <span ng-click="toggleSectionItems()" class="sprite sprite-Console post_button faster_animate"></span>
@@ -66,7 +66,7 @@
     </div>
 </div>
 <!-- 編輯數據 -->
-<div ng-if="isShowSectionItems && isEditSectionItems" class="popup general_animate">
+<div ng-if="isShowSectionItems && isEditSectionItems" class="popup faster_animate">
     <h2>EDIT ITEMS</h2>
     <div class="popup_inner">
         <div ng-repeat="item in editSectionItems track by $index">
@@ -83,14 +83,14 @@
     </div>
 </div>
 <!-- 導出數據 -->
-<div ng-if="isShowItemsData" class="popup general_animate">
+<div ng-if="isShowItemsData" class="popup faster_animate">
     <h2>DATA ITEMS</h2>
     <div class="popup_inner">
         <pre>{{sectionItemsData}}</pre>
     </div>
 </div>
 <!-- 提示框 -->
-<div ng-if="isShowAlert" id="alert" class="popup general_animate">
+<div ng-if="isShowAlert" id="alert" class="popup faster_animate">
     <div class="vertically_center">
         <h2>{{alertTitle}}</h2>
         <div>

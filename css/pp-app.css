@@ -381,7 +381,7 @@ button, html input[type="button"], input[type="submit"] {
             opacity: 1;
         }
         /* 章節按鈕 */
-        .post_button.itemsExist, .post_button.itemsExist:hover {
+        .post_button.emptyItems, .post_button.emptyItems:hover {
             opacity: 0.2;
             cursor: default;
         }
