@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2015 RoberTu <robertu0717@gmail.com>
  * @license MIT
- * @version v0.2.0
+ * @version v0.2.1
  */
 
 ;(function (window, document){
