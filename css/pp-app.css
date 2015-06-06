@@ -36,6 +36,9 @@ h1, h2, h3, h4, h5 {
     -moz-user-select: none;
     user-select: none;
 }
+b {
+    font-weight: 600;
+}
 a {
     color: inherit;
     text-decoration: none;
@@ -241,8 +244,8 @@ button, html input[type="button"], input[type="submit"] {
     #guide p, pre, ul {
         margin-bottom: 16px;
     }
-    #demo h2, #demo h3 {
-        margin: .5em 0;
+    #guide .timelineColor {
+        color: #CECECF;
     }
 #install p {
     text-align: center;
@@ -264,8 +267,13 @@ button, html input[type="button"], input[type="submit"] {
 #usage .step {
     margin: 1em 0;
 }
-
+#postpicker ul {
+    list-style-type: decimal;
+}
 /* FIRST CONTACT */
+#demo h2, #demo h3 {
+    margin: .5em 0;
+}
 #demo .episode {
     text-align: center;
 }

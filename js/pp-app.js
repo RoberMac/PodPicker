@@ -28,7 +28,9 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
     $http.get('template/guide.min.html', {
         cache: $templateCache
     })
-
+    // 預加載「工具欄」圖片
+    var spritesheet = new Image()
+    spritesheet.src = './img/spritesheet.png'
 }])
 .controller('demoController', ['$rootScope', function($rootScope){
 
