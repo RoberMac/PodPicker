@@ -38,7 +38,7 @@
 
 <!-- Outer -->
 <!-- 幫助 -->
-<a ng-if="isLoadAudioFile" href="#!/guide#troubleshoot">
+<a ng-if="isLoadAudioFile" href="#!/guide#postpicker">
     <div id="help" class="bottom_right_corner">
         <span>?</span>
     </div>
@@ -60,7 +60,7 @@
     <!-- 下載數據按鈕 & 導出數據按鈕 -->
     <div ng-show="!isEditSectionItems">
         <a ng-show="isShowItemsData" id="downloadItemsData">
-            <span ng-click="downloadItemsData()" class="sprite sprite-Export post_button faster_animate"></span>
+            <span ng-click="downloadItemsData()" class="sprite sprite-Export downloadItemsData post_button faster_animate"></span>
         </a>
         <span ng-click="toggleItemsData()" class="sprite post_button faster_animate" ng-class="{'sprite-Export': !isShowItemsData, 'sprite-Export-Selected': isShowItemsData}"></span>
     </div>

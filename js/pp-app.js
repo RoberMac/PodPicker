@@ -76,7 +76,7 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
             $scope.isConsole = false
             audioPlayer.src = URL.createObjectURL(file)
             $timeout(function (){
-                audioPlayer.currentTime = audioStore.get('lastPlayTime')
+                audioPlayer.currentTime = audioStore.get('lastPlayedTimestamp')
             }, 100)
         })
         // 恢復上次編輯的數據
@@ -165,7 +165,7 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
         } else if (isShowSectionItems && !isEmpty){
             // 隱藏時間線
             // 還原上次播放時間
-            audioPlayer.currentTime = audioStore.get('lastPlayTime')
+            audioPlayer.currentTime = audioStore.get('lastPlayedTimestamp')
             listenAudioFile()
         } else {
             return
@@ -295,7 +295,7 @@ angular.module('ppApp', ['ngRoute', 'ngAnimate', 'angular-storage'])
         })
         // 存儲當前播放時間
         ngAudioPlayer.bind('timeupdate', function (){
-            audioStore.set('lastPlayTime', audioPlayer.currentTime)
+            audioStore.set('lastPlayedTimestamp', audioPlayer.currentTime)
         })
     }
     // 刷新「時間線」
