@@ -52,10 +52,10 @@ For example:
   var items = [
     {"start":    "00:00", "title": "INTRODUCTION"},
     {"start":    "07:07", "title": "THE HISTORY AND CHRONOLOGY OF CUBISM"},
-    {"start":    "40:55", "title": "PICASSO AND BRAQUE 1907-12"},
-    {"start": "02:40:11", "title": "ICASSO, BRAQUE AND GRIS 1912-14"},
-    {"start": "05:22:32", "title": "THE INFLUENCE OF CUBISM IN FRANCE 1910-14"},
-    {"start": "06:30:50", "title": "CONCLUSION"},
+    {"start":    "18:55", "title": "PICASSO AND BRAQUE 1907-12"},
+    {"start":    "40:11", "title": "ICASSO, BRAQUE AND GRIS 1912-14"},
+    {"start": "01:22:32", "title": "THE INFLUENCE OF CUBISM IN FRANCE 1910-14"},
+    {"start": "02:04:50", "title": "CONCLUSION"},
   ]
 ```
 
@@ -83,9 +83,33 @@ For example:
 ## [Postpicker](https://robermac.github.io/PodPicker/#!/postpicker)
 *A Tool To Generate [Data Items](https://github.com/RoberMac/PodPicker#data-format) Relatively Quickly*
 #### Getting Started
-1. [Import an audio file](https://raw.githubusercontent.com/RoberMac/PodPicker/master/img/step-1.gif) (Supports Ogg and AAC audio formats [\[1\]](https://github.com/RoberMac/PodPicker#troubleshoot))
-2. [Create a new section](https://raw.githubusercontent.com/RoberMac/PodPicker/master/img/step-2.gif)
-3. [Export Data Items](https://raw.githubusercontent.com/RoberMac/PodPicker/master/img/step-3.gif)
+1. [Import an audio file](https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/step-1.gif) (Supports Ogg and AAC audio formats [\[1\]](https://github.com/RoberMac/PodPicker#troubleshoot))
+2. [Create a new section](https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/step-2.gif)
+3. [Export Data Items](https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/step-3.gif)
+
+#### Console
+###### Time Machine 
+<img width="36px" src="https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/30s-Skip-Back.png" />
+<img width="36px" src="https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/5s-Skip-Back.png" />
+<img width="36px" src="https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/Rate-2x.png" />
+<img width="36px" src="https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/5s-Skip-Forward.png" />
+<img width="36px" src="https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/30s-Skip-Forward.png" />
+###### Time Changer
+<img width="36px" src="https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/Edit-Items.png" />
+<img width="36px" src="https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/Delete-Item.png" />
+<img width="36px" src="https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/Clear-Section-Items.png" />
+###### Time Keeper
+<img width="36px" src="https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/Refresh.png" />
+###### Exporter
+<img width="36px" src="https://raw.githubusercontent.com/RoberMac/PodPicker/gh-pages/img/postpicker/Export.png" />
+
+
+#### Hibernation
+Postpicker will store your data locally within your browser, when you import the same audio file next time, it will automatically restore your data.
+
+The following data is stored locally:
+- The Last Played Timestamp
+- The Data Items
 
 ## Troubleshoot
 #### Audio File Format
