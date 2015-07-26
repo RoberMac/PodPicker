@@ -1,6 +1,6 @@
 {
   "name": "podpicker",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A Podcast Timeline Generator",
   "main": "dist/PodPicker.js",
   "repository": {
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/RoberMac/PodPicker",
   "devDependencies": {
     "gulp": "~3.8.11",
+    "gulp-babel": "^5.1.0",
     "gulp-concat": "^2.5.2",
     "gulp-minify-css": "^1.1.0",
     "gulp-sourcemaps": "^1.5.2",

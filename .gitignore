@@ -1,5 +1,6 @@
 ignore
 node_modules
 .DS_Store
+.sass-cache
 app.js
 TODO

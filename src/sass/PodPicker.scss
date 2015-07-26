@@ -1,0 +1,64 @@
+@import "compass/css3";
+
+/* Timeline */
+#pp-timeline {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 0px;
+        width: 2px;
+        height: 100%;
+        background-color: #000;
+    }
+    ul {
+        padding: 0 0 0 25px;
+        text-align: left;
+        list-style: none;
+    }
+    .pp-item > span {
+        @include transition(all .5s ease-in-out);
+        position: relative;
+        display: inline-block;
+        max-width: 100%;
+        line-height: 2em;
+        vertical-align: middle;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: pointer;
+
+        &:hover, &.currentSection {
+            color: #000;
+        }
+    }
+}
+
+/* Pointer */
+#pp-pointer {
+    @include transition(all .5s ease-in-out);
+    @include border-radius(50%);
+    position: absolute;
+    left: 5px;
+    top: 0px;
+    width: 12px;
+    height: 12px;
+    background-color: #000;
+
+    &.seeking {
+        @include animation(seeking_animate 0.7s infinite alternate linear);
+    }
+}
+@include keyframes(seeking_animate){
+    0% {
+        @include opacity(0);
+        @include filter(blur(2px));
+    }
+    100% {
+        @include opacity(1);
+        @include filter(blur(0px));
+    }
+}
+

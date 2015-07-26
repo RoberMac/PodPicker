@@ -2,12 +2,22 @@ var gulp       = require('gulp'),
     concat     = require('gulp-concat'),
     sourcemaps = require('gulp-sourcemaps'),
     minifyCSS  = require('gulp-minify-css'),
-    uglify     = require('gulp-uglify');
+    uglify     = require('gulp-uglify'),
+    babel      = require("gulp-babel");
 
 var paths = {
-    js : ['dist/PodPicker.js'],
-    css: ['dist/PodPicker.css']
+    babel: ['src/PodPicker.babel.js'],
+    js   : ['dist/PodPicker.js'],
+    css  : ['dist/PodPicker.css']
 };
+
+// ES6
+gulp.task("es6", function () {
+  return gulp.src(paths.babel)
+    .pipe(babel())
+    .pipe(concat('PodPicker.js'))
+    .pipe(gulp.dest("dist"));
+});
 
 // Minify JavaScript
 gulp.task('js', function() {
@@ -34,10 +44,10 @@ gulp.task('css', function () {
 
 // Rerun the task when a file changes 
 gulp.task('watch', function() {
-
+    gulp.watch(paths.babel, ['es6'])
     gulp.watch(paths.js, ['js']);
     gulp.watch(paths.css, ['css']);
 });
 
 // The default task (called when you run `gulp` from cli) 
-gulp.task('default', ['watch', 'js', 'css']);
+gulp.task('default', ['watch', 'es6' , 'js', 'css']);
