@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2015 RoberTu <robertu0717@gmail.com>
  * @license MIT
- * @version v0.2.2
+ * @version v0.2.3
  */
 
 ;(function (window, document){
@@ -36,27 +36,27 @@ class PodPicker {
          */
         // Check `container` parameter
         PodPicker.isUndefined(container)
-            ? PodPicker.throwError(PodPicker.ERROR_MSG.param_container)
+            ? PodPicker.throwError('default', PodPicker.ERROR_MSG.param_container)
             : PodPicker.isString(container)
                 ? this.container = document.getElementById(container)
-                : PodPicker.throwError(PodPicker.ERROR_MSG.type_container)
+                : PodPicker.throwError('type', PodPicker.ERROR_MSG.type_container)
 
         !this.container
-            ? PodPicker.throwError(PodPicker.ERROR_MSG.elem_container)
+            ? PodPicker.throwError('default', PodPicker.ERROR_MSG.elem_container)
             : null
 
         // Check `items` parameter
         PodPicker.isUndefined(items)
-            ? PodPicker.throwError(PodPicker.ERROR_MSG.param_items)
+            ? PodPicker.throwError('default', PodPicker.ERROR_MSG.param_items)
             : PodPicker.isArray(items)
                 ? items.length <= 0
-                    ? PodPicker.throwError(PodPicker.ERROR_MSG.empty_items)
+                    ? PodPicker.throwError('default', PodPicker.ERROR_MSG.empty_items)
                     : null
-                : PodPicker.throwError(PodPicker.ERROR_MSG.type_items)
+                : PodPicker.throwError('type', PodPicker.ERROR_MSG.type_items)
 
         // Check `options` parameter
         !PodPicker.isUndefined(options) && !PodPicker.isObject(options)
-            ? PodPicker.throwError(PodPicker.ERROR_MSG.type_options)
+            ? PodPicker.throwError('type', PodPicker.ERROR_MSG.type_options)
             : this.options = options || {}
 
         // Sort items array by item object
@@ -97,7 +97,7 @@ class PodPicker {
             if (currentSrc){
                 clearInterval(currentSrcInterval)
                 currentSrc.match(/\.mp3/i)
-                    ? that.throwError(PodPicker.ERROR_MSG.format_audioFile)
+                    ? that.throwError('default', PodPicker.ERROR_MSG.format_audioFile)
                     : that.createTimeline()
             }
         }, 10)
@@ -112,21 +112,21 @@ class PodPicker {
         // Allow options: 'audioElem', 'timelineColor', 'isShowStartTime'
         // Check option: 'audioElem'
         !PodPicker.isUndefined(options.audioElem) && !PodPicker.isString(options.audioElem)
-            ? PodPicker.throwError(PodPicker.ERROR_MSG.type_options_audioElem)
+            ? PodPicker.throwError('type', PodPicker.ERROR_MSG.type_options_audioElem)
             : null
 
         // Check option: 'timelineColor'
         !PodPicker.isUndefined(options.timelineColor)
             ? !PodPicker.isString(options.timelineColor)
-                ? PodPicker.throwError(PodPicker.ERROR_MSG.type_options_timelineColor)
+                ? PodPicker.throwError('type', PodPicker.ERROR_MSG.type_options_timelineColor)
                 : PodPicker.isHexColor(options.timelineColor)
                     ? null
-                    : PodPicker.throwError(PodPicker.ERROR_MSG.type_value_options_timelineColor)
+                    : PodPicker.throwError('type', PodPicker.ERROR_MSG.type_value_options_timelineColor)
             : null
 
         // Check option: 'isShowStartTime'
         !PodPicker.isUndefined(options.isShowStartTime) && !PodPicker.isBoolean(options.isShowStartTime)
-            ? PodPicker.throwError(PodPicker.ERROR_MSG.type_options_isShowStartTime)
+            ? PodPicker.throwError('type', PodPicker.ERROR_MSG.type_options_isShowStartTime)
             : null
 
 
@@ -260,11 +260,10 @@ class PodPicker {
      * @param {String} timeString  A time string 
      */
     convertTime (timeString){
-
         // Check time string
         PodPicker.isTimeString(timeString)
             ? null
-            : PodPicker.throwError(PodPicker.ERROR_MSG.format_start)
+            : PodPicker.throwError('default', PodPicker.ERROR_MSG.format_start)
 
         var timeArray = timeString.split(':'),
             len = timeArray.length;
@@ -281,7 +280,7 @@ class PodPicker {
                 return timeArray[0] * 60 * 60 + timeArray[1] * 60 + timeArray[2] * 1
                 break;
             default:
-                PodPicker.throwError(PodPicker.ERROR_MSG.format_start)
+                PodPicker.throwError('default', PodPicker.ERROR_MSG.format_start)
         }        
     }
     /**
@@ -292,7 +291,7 @@ class PodPicker {
         return {
             // `container` parameter
             param_container: 'Pod Picker: `container` parameter is required',
-            type_container: 'Pod Picker: `container` parameter must be an string',
+            type_container: 'Pod Picker: `container` parameter must be a string',
             elem_container: 'Pod Picker: `container` parameter is not related to an existing ID',
             // `items` parameter
             param_items: 'Pod Picker: `items` parameter is required',
@@ -300,10 +299,10 @@ class PodPicker {
             empty_items: 'Pod Picker: `items` parameter cannot be an empty array',
             // `options` parameter
             type_options: 'Pod Picker: `options` parameter must be an object',
-            type_options_audioElem: 'Pod Picker: `options.audioElem` must be an string',
-            type_options_timelineColor: 'Pod Picker: `options.timelineColor` must be an string',
-            type_options_isShowStartTime: 'Pod Picker: `options.isShowStartTime` must be an boolean',
-            type_value_options_timelineColor: 'Pod Picker: `options.timelineColor` must be an hex color',
+            type_options_audioElem: 'Pod Picker: `options.audioElem` must be a string',
+            type_options_timelineColor: 'Pod Picker: `options.timelineColor` must be a string',
+            type_options_isShowStartTime: 'Pod Picker: `options.isShowStartTime` must be a boolean',
+            type_value_options_timelineColor: 'Pod Picker: `options.timelineColor` must be a hex color',
             // others
             format_audioFile: 'Pod Picker: does not support MP3 file format',
             format_start: 'Pod Picker: `start` time string must be "hh:mm:ss", "mm:ss" or "ss" format'
@@ -314,8 +313,17 @@ class PodPicker {
      *
      * @param {String} ERROR_MSG  Error message
      */
-    static throwError (msg){
-        throw new Error(msg)
+    static throwError (type, msg){
+
+        switch (type){
+
+            case 'type': 
+                throw new TypeError(msg)
+                break;
+            default:
+                throw new Error(msg)
+                break;
+        }
     }
     /**
      * Determines if a value is `undefined / string / boolean / array / object / hex color / timeString`
@@ -335,7 +343,7 @@ class PodPicker {
         return value.constructor === Array;
     }
     static isObject (value){
-        return value !== null && typeof value === 'object';
+        return value.constructor === Object
     }
     static isHexColor (value){
         // via http://stackoverflow.com/a/8027444/3786947

@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2015 RoberTu <robertu0717@gmail.com>
  * @license MIT
- * @version v0.2.2
+ * @version v0.2.3
  */
 
 'use strict';
@@ -43,15 +43,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               *
               */
             // Check `container` parameter
-            PodPicker.isUndefined(container) ? PodPicker.throwError(PodPicker.ERROR_MSG.param_container) : PodPicker.isString(container) ? this.container = document.getElementById(container) : PodPicker.throwError(PodPicker.ERROR_MSG.type_container);
+            PodPicker.isUndefined(container) ? PodPicker.throwError('default', PodPicker.ERROR_MSG.param_container) : PodPicker.isString(container) ? this.container = document.getElementById(container) : PodPicker.throwError('type', PodPicker.ERROR_MSG.type_container);
 
-            !this.container ? PodPicker.throwError(PodPicker.ERROR_MSG.elem_container) : null;
+            !this.container ? PodPicker.throwError('default', PodPicker.ERROR_MSG.elem_container) : null;
 
             // Check `items` parameter
-            PodPicker.isUndefined(items) ? PodPicker.throwError(PodPicker.ERROR_MSG.param_items) : PodPicker.isArray(items) ? items.length <= 0 ? PodPicker.throwError(PodPicker.ERROR_MSG.empty_items) : null : PodPicker.throwError(PodPicker.ERROR_MSG.type_items);
+            PodPicker.isUndefined(items) ? PodPicker.throwError('default', PodPicker.ERROR_MSG.param_items) : PodPicker.isArray(items) ? items.length <= 0 ? PodPicker.throwError('default', PodPicker.ERROR_MSG.empty_items) : null : PodPicker.throwError('type', PodPicker.ERROR_MSG.type_items);
 
             // Check `options` parameter
-            !PodPicker.isUndefined(options) && !PodPicker.isObject(options) ? PodPicker.throwError(PodPicker.ERROR_MSG.type_options) : this.options = options || {};
+            !PodPicker.isUndefined(options) && !PodPicker.isObject(options) ? PodPicker.throwError('type', PodPicker.ERROR_MSG.type_options) : this.options = options || {};
 
             // Sort items array by item object
             var that = this;
@@ -94,7 +94,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     var currentSrc = that.audioElem.currentSrc;
                     if (currentSrc) {
                         clearInterval(currentSrcInterval);
-                        currentSrc.match(/\.mp3/i) ? that.throwError(PodPicker.ERROR_MSG.format_audioFile) : that.createTimeline();
+                        currentSrc.match(/\.mp3/i) ? that.throwError('default', PodPicker.ERROR_MSG.format_audioFile) : that.createTimeline();
                     }
                 }, 10);
             }
@@ -110,13 +110,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 // Allow options: 'audioElem', 'timelineColor', 'isShowStartTime'
                 // Check option: 'audioElem'
-                !PodPicker.isUndefined(options.audioElem) && !PodPicker.isString(options.audioElem) ? PodPicker.throwError(PodPicker.ERROR_MSG.type_options_audioElem) : null;
+                !PodPicker.isUndefined(options.audioElem) && !PodPicker.isString(options.audioElem) ? PodPicker.throwError('type', PodPicker.ERROR_MSG.type_options_audioElem) : null;
 
                 // Check option: 'timelineColor'
-                !PodPicker.isUndefined(options.timelineColor) ? !PodPicker.isString(options.timelineColor) ? PodPicker.throwError(PodPicker.ERROR_MSG.type_options_timelineColor) : PodPicker.isHexColor(options.timelineColor) ? null : PodPicker.throwError(PodPicker.ERROR_MSG.type_value_options_timelineColor) : null;
+                !PodPicker.isUndefined(options.timelineColor) ? !PodPicker.isString(options.timelineColor) ? PodPicker.throwError('type', PodPicker.ERROR_MSG.type_options_timelineColor) : PodPicker.isHexColor(options.timelineColor) ? null : PodPicker.throwError('type', PodPicker.ERROR_MSG.type_value_options_timelineColor) : null;
 
                 // Check option: 'isShowStartTime'
-                !PodPicker.isUndefined(options.isShowStartTime) && !PodPicker.isBoolean(options.isShowStartTime) ? PodPicker.throwError(PodPicker.ERROR_MSG.type_options_isShowStartTime) : null;
+                !PodPicker.isUndefined(options.isShowStartTime) && !PodPicker.isBoolean(options.isShowStartTime) ? PodPicker.throwError('type', PodPicker.ERROR_MSG.type_options_isShowStartTime) : null;
 
                 // Set options
                 this.audioElem = options.audioElem ? document.getElementById(options.audioElem) : document.getElementsByTagName('audio')[0];
@@ -241,9 +241,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'convertTime',
             value: function convertTime(timeString) {
-
                 // Check time string
-                PodPicker.isTimeString(timeString) ? null : PodPicker.throwError(PodPicker.ERROR_MSG.format_start);
+                PodPicker.isTimeString(timeString) ? null : PodPicker.throwError('default', PodPicker.ERROR_MSG.format_start);
 
                 var timeArray = timeString.split(':'),
                     len = timeArray.length;
@@ -260,7 +259,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         return timeArray[0] * 60 * 60 + timeArray[1] * 60 + timeArray[2] * 1;
                         break;
                     default:
-                        PodPicker.throwError(PodPicker.ERROR_MSG.format_start);
+                        PodPicker.throwError('default', PodPicker.ERROR_MSG.format_start);
                 }
             }
 
@@ -276,8 +275,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
              *
              * @param {String} ERROR_MSG  Error message
              */
-            value: function throwError(msg) {
-                throw new Error(msg);
+            value: function throwError(type, msg) {
+
+                switch (type) {
+
+                    case 'type':
+                        throw new TypeError(msg);
+                        break;
+                    default:
+                        throw new Error(msg);
+                        break;
+                }
             }
 
             /**
@@ -308,7 +316,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: 'isObject',
             value: function isObject(value) {
-                return value !== null && typeof value === 'object';
+                return value.constructor === Object;
             }
         }, {
             key: 'isHexColor',
@@ -327,7 +335,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return {
                     // `container` parameter
                     param_container: 'Pod Picker: `container` parameter is required',
-                    type_container: 'Pod Picker: `container` parameter must be an string',
+                    type_container: 'Pod Picker: `container` parameter must be a string',
                     elem_container: 'Pod Picker: `container` parameter is not related to an existing ID',
                     // `items` parameter
                     param_items: 'Pod Picker: `items` parameter is required',
@@ -335,10 +343,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     empty_items: 'Pod Picker: `items` parameter cannot be an empty array',
                     // `options` parameter
                     type_options: 'Pod Picker: `options` parameter must be an object',
-                    type_options_audioElem: 'Pod Picker: `options.audioElem` must be an string',
-                    type_options_timelineColor: 'Pod Picker: `options.timelineColor` must be an string',
-                    type_options_isShowStartTime: 'Pod Picker: `options.isShowStartTime` must be an boolean',
-                    type_value_options_timelineColor: 'Pod Picker: `options.timelineColor` must be an hex color',
+                    type_options_audioElem: 'Pod Picker: `options.audioElem` must be a string',
+                    type_options_timelineColor: 'Pod Picker: `options.timelineColor` must be a string',
+                    type_options_isShowStartTime: 'Pod Picker: `options.isShowStartTime` must be a boolean',
+                    type_value_options_timelineColor: 'Pod Picker: `options.timelineColor` must be a hex color',
                     // others
                     format_audioFile: 'Pod Picker: does not support MP3 file format',
                     format_start: 'Pod Picker: `start` time string must be "hh:mm:ss", "mm:ss" or "ss" format'

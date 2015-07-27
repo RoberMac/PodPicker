@@ -55,7 +55,7 @@ For example:
     {"start":    "18:55", "title": "PICASSO AND BRAQUE 1907-12"},
     {"start":    "40:11", "title": "ICASSO, BRAQUE AND GRIS 1912-14"},
     {"start": "01:22:32", "title": "THE INFLUENCE OF CUBISM IN FRANCE 1910-14"},
-    {"start": "02:04:50", "title": "CONCLUSION"},
+    {"start": "02:04:50", "title": "CONCLUSION"}
   ]
 ```
 
@@ -123,7 +123,7 @@ For example:
 ```
   <audio id="podcast_audio" controls>
       <source src="your_audio_file.ogg" type="audio/ogg"> // for Chrome, Firefox 3.6+, Opera 10+
-      <source src="your_audio_file.m4a" type="audio/mp4"> // for Safari, IE 9.0+, 
+      <source src="your_audio_file.m4a" type="audio/mp4"> // for Safari, IE 9.0+
   </audio>
 ```
 For more details, see [\[1\]](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility)
