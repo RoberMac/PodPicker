@@ -86,6 +86,11 @@ button, html input[type="button"], input[type="submit"] {
 .text_align_center {
     text-align: center;
 }
+.top_right_corner {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+}
 /* 右下角 */
 .bottom_right_corner {
     position: absolute;
@@ -251,6 +256,12 @@ button, html input[type="button"], input[type="submit"] {
     #guide .timelineColor {
         color: #CECECF;
     }
+#jquery_plugin {
+    font-size: 11px;
+}
+#jquery_plugin::after {
+    content: '\25B8';
+}
 #install #slash {
     margin: 0 1em;
 }

@@ -1,4 +1,4 @@
-<div id=guide> <div id=install> <h2>Install</h2> <p class=text_align_center><code>npm install podpicker</code><span id=slash>/</span><code>bower install podpicker</code></p> <p class=text_align_center><span class=link><a href=http://www.jsdelivr.com/#!podpicker target=_blank>CDN</a></span></p> </div>  <div id=usage> <h2>Usage</h2>  <h3>Getting Started</h3> <div class=step> <p> <span class=firstletter>1</span> Include the scripts and style sheets in the &lt;head&gt; section </p> <pre>
+<div id=guide> <div id=jquery_plugin class=top_right_corner> <span class=link> <a href=https://github.com/RoberMac/jQuery-PodPicker target=_blank>jQuery Plugin</a> </span> </div> <div id=install> <h2>Install</h2> <p class=text_align_center><code>npm install podpicker</code><span id=slash>/</span><code>bower install podpicker</code></p> <p class=text_align_center><span class=link><a href=http://www.jsdelivr.com/#!podpicker target=_blank>CDN</a></span></p> </div>  <div id=usage> <h2>Usage</h2>  <h3>Getting Started</h3> <div class=step> <p> <span class=firstletter>1</span> Include the scripts and style sheets in the &lt;head&gt; section </p> <pre>
 &lt;head&gt;
     ...
     &lt;link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/podpicker/latest/PodPicker.min.css"&gt;
@@ -13,7 +13,7 @@ var items = [
     {"start":    "18:55", "title": "PICASSO AND BRAQUE 1907-12"},
     {"start":    "40:11", "title": "ICASSO, BRAQUE AND GRIS 1912-14"},
     {"start": "01:22:32", "title": "THE INFLUENCE OF CUBISM IN FRANCE 1910-14"},
-    {"start": "02:04:50", "title": "CONCLUSION"},
+    {"start": "02:04:50", "title": "CONCLUSION"}
 ]</pre>   <h4 id=options>Options</h4> <p>The following options are available: </p> <ul> <li><code>audioElem</code> is the audio element to interact with</li> <ul> <li>type: <code><em>String</em></code></li> <li>format: id attribute (the default value is the first &lt;audio&gt; element of DOM)</li> </ul> <li><code>timelineColor</code> is the timeline Section Title color</li> <ul> <li>type: <code><em>String</em></code></li> <li>format: hex color (the default value is "<span class=timelineColor>#CECECF</span>")</li> </ul> <li><code>isShowStartTime</code> is to determine whether you need to show start time in front of the Section Title</li> <ul> <li>type: <code><em>Boolean</em></code></li> <li>format: <code>true</code> or <code>false</code> (the default value is <code>false</code>)</li> </ul> </ul> <p>For example:</p> <pre>
 var pp_with_options = new PodPicker('pp-wrapper', items, {
     "audioElem"      : "podcast_audio",
